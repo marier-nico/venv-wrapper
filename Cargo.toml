@@ -7,11 +7,11 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+ansi_term = "~0.12.1"
 clap = { version = "~2.33.3", features=["color"]}
 config = "~0.10.1"
 directories = "~3.0.1"
 eyre = "~0.6.3"
 serde = { version = "~1.0", features = ["derive"] }
 simple-eyre = "~0.3"
-termcolor = "~1.1"
 toml = "~0.5"

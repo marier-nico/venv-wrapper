@@ -11,6 +11,10 @@ pub fn get_app<'a, 'b>() -> clap::App<'a, 'b> {
         (@subcommand init =>
             (about: "Prepare the shell for use")
         )
+        (@subcommand ls =>
+            (about: "Show a list of available virtualenvs")
+            (@arg venvs_dir: !required +takes_value -d --("venvs-dir") "Sets the virtualenv directory (default: ~/.virtualenvs)")
+        )
     )
     .setting(AppSettings::ArgRequiredElseHelp)
 }

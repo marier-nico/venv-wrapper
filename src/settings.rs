@@ -1,11 +1,9 @@
-use std::path::PathBuf;
-
 use directories::UserDirs;
 use eyre::Result;
 
 #[derive(Debug, Deserialize)]
 pub struct Settings {
-    venvs_directory: PathBuf,
+    pub venvs_dir: String,
 }
 
 impl Settings {
@@ -19,7 +17,7 @@ impl Settings {
 
             settings
                 .set_default(
-                    "venvs_directory",
+                    "venvs_dir",
                     venvs_default_dir
                         .to_str()
                         .ok_or_else(|| eyre!("Path to home directory is not valid UTF-8"))?,
