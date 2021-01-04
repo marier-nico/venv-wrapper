@@ -34,9 +34,7 @@ impl Settings {
         config_file.push("config.toml");
         settings.merge(config::File::from(config_file)).ok();
 
-        settings
-            .merge(config::Environment::with_prefix("VENVWRAPPER"))
-            .ok();
+        settings.merge(config::Environment::with_prefix("VENVWRAPPER")).ok();
 
         Ok(settings
             .try_into()

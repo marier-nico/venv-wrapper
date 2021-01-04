@@ -14,9 +14,7 @@ pub fn init() -> eyre::Result<()> {
             echo -e $result
         fi
     }}",
-        current_exe
-            .to_str()
-            .ok_or_else(|| eyre!("Path to executable is not valid UTF-8"))?
+        current_exe.to_str().ok_or_else(|| eyre!("Path to executable is not valid UTF-8"))?
     );
 
     print!("{}", s);

@@ -27,6 +27,7 @@ fn cli_main() -> Result<()> {
     match matches.subcommand() {
         ("init", Some(_sub_matches)) => commands::init()?,
         ("ls", Some(sub_matches)) => commands::ls(&settings, sub_matches)?,
+        ("new", Some(sub_matches)) => commands::new(&settings, sub_matches)?,
         _ => return Err(eyre!("Unhandled subcommand")),
     }
 

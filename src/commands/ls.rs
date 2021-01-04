@@ -43,10 +43,7 @@ pub fn ls(settings: &Settings, args: &ArgMatches) -> Result<()> {
         .collect();
 
     if invalid_utf_8 {
-        println!(
-            "\n {} Some virtual environment names were not valid UTF-8.",
-            Yellow.paint("w")
-        );
+        println!("\n {} Some virtual environment names were not valid UTF-8.", Yellow.paint("w"));
     }
 
     if venv_names.is_empty() {

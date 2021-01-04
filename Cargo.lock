@@ -293,6 +293,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "quale"
+version = "1.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c46811c513cc64cceb23adc27892b3b3470c1790de117610221b97071de8bc8c"
+dependencies = [
+ "libc",
+]
+
+[[package]]
 name = "quote"
 version = "1.0.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -506,6 +515,7 @@ dependencies = [
  "config",
  "directories",
  "eyre",
+ "quale",
  "serde 1.0.118",
  "simple-eyre",
  "toml",
