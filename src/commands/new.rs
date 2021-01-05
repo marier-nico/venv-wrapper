@@ -23,11 +23,9 @@ pub fn new(settings: &Settings, args: &ArgMatches) -> Result<()> {
         eyre!("Could not determine the path to the python executable ({})", python_exec_name)
     })?;
 
-    // TODO: Python2 does not work because the module `venv` doesn't exist
-    //       Check the output of the command to make sure it was successful.
     println!();
     let spinner = Spinner::new(Spinners::Dots, String::from("Creating your virtual environment"));
-    let _cmd = Command::new(python_exec_path)
+    let cmd = Command::new(python_exec_path)
         .args(&[
             "-m",
             "venv",
@@ -38,7 +36,13 @@ pub fn new(settings: &Settings, args: &ArgMatches) -> Result<()> {
         .context("Unable to call the python binary to create a virtualenv")?;
     spinner.stop();
 
-    println!("\n\n {}  Successfully created the virtualenv `{}`.", Green.paint("✔"), venv_name);
+    if cmd.status.success() {
+        println!(" {}  Successfully created the virtualenv `{}`.", Green.paint("✔"), venv_name);
+    } else {
+        let stderr = String::from_utf8(cmd.stderr)?.trim().to_owned();
+        return Err(eyre!(stderr))
+            .context("Could not create the virtualenv with the specified python executable");
+    }
 
     Ok(())
 }
