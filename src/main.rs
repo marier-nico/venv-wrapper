@@ -23,13 +23,13 @@ fn main() {
 
 fn cli_main() -> Result<()> {
     simple_eyre::install()?;
-    let settings = settings::Settings::new()?;
     let eval_file = create_eval_dir()?;
 
     let matches = clap_app::get_app().get_matches();
+    let settings = settings::Settings::new(&matches)?;
     match matches.subcommand() {
         ("init", Some(_sub_matches)) => commands::init(eval_file)?,
-        ("ls", Some(sub_matches)) => commands::ls(&settings, sub_matches)?,
+        ("ls", Some(_sub_matches)) => commands::ls(&settings)?,
         ("new", Some(sub_matches)) => commands::new(&settings, sub_matches)?,
         _ => return Err(eyre!("Unhandled subcommand")),
     }

@@ -10,7 +10,7 @@ use spinners::{Spinner, Spinners};
 use crate::settings::Settings;
 
 pub fn new(settings: &Settings, args: &ArgMatches) -> Result<()> {
-    let mut venv_dir = PathBuf::from(args.value_of("venvs_dir").unwrap_or(&settings.venvs_dir));
+    let mut venv_dir = PathBuf::from(&settings.venvs_dir);
     let venv_name = args.value_of("venv_name").unwrap();
     venv_dir.push(venv_name); // `venv_name` is a required arg
 

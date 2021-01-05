@@ -8,18 +8,22 @@ pub fn get_app<'a, 'b>() -> clap::App<'a, 'b> {
         (author: "Nicolas Marier <software@nmarier.com>")
         (about: "Virtualenvwrapper, but in rust!")
 
+        (@arg venvs_dir: !required +takes_value -d --("venvs-dir") "Sets where to look for the virtualenv to activate [default: ~/.virtualenvs]")
+
         (@subcommand init =>
             (about: "Prepare the shell for use")
         )
         (@subcommand ls =>
             (about: "Show a list of available virtualenvs")
-            (@arg venvs_dir: !required +takes_value -d --("venvs-dir") "Sets where to search for virtualenvs [default: ~/.virtualenvs]")
         )
         (@subcommand new =>
             (about: "Create a new virtual environment")
-            (@arg venvs_dir: !required +takes_value -d --("venvs-dir") "Sets where to create the virtualenv [default: ~/.virtualenvs]")
             (@arg venv_name: +required +takes_value "The name for the new virtualenv")
-            (@arg python_executable: !required +takes_value default_value("python3") -p --python "Sets the python executable name for the virtualenv")
+            (@arg python_executable: !required +takes_value default_value("python3") -p --python "Sets the python executable name for the virtualenv (provided value must be in your path)")
+        )
+        (@subcommand activate =>
+            (about: "Activate a virtualenv")
+            (@arg venv_name: +required +takes_value "The name of the virtualenv to activate")
         )
     )
     .setting(AppSettings::ArgRequiredElseHelp)
