@@ -34,6 +34,7 @@ fn cli_main() -> Result<()> {
         ("activate", Some(sub_matches)) => {
             commands::activate_cli(&settings, sub_matches, &eval_file)?
         }
+        ("deactivate", Some(_sub_matches)) => commands::deactivate(&eval_file)?,
         _ => return Err(eyre!("Unhandled subcommand")),
     }
 

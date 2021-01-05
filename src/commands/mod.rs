@@ -9,3 +9,6 @@ pub use new::new;
 
 mod activate;
 pub use activate::{activate, activate_cli};
+
+mod deactivate;
+pub use deactivate::deactivate;

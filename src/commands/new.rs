@@ -40,7 +40,7 @@ pub fn new(settings: &Settings, args: &ArgMatches, eval_file: &Path) -> Result<(
     spinner.stop();
 
     if cmd.status.success() {
-        println!(" {}  Successfully created the virtualenv `{}`.", Green.paint("✔"), venv_name);
+        println!("\n\n {}  Successfully created the virtualenv `{}`.", Green.paint("✔"), venv_name);
     } else {
         let stderr = String::from_utf8(cmd.stderr)?.trim().to_owned();
         return Err(eyre!(stderr))
