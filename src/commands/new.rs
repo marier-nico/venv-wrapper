@@ -1,20 +1,21 @@
 use ansi_term::Colour::Green;
 use quale::which;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use std::process::{Command, Stdio};
 
 use clap::ArgMatches;
 use eyre::{Context, Result};
 use spinners::{Spinner, Spinners};
 
+use crate::commands::activate;
 use crate::settings::Settings;
 
-pub fn new(settings: &Settings, args: &ArgMatches) -> Result<()> {
-    let mut venv_dir = PathBuf::from(&settings.venvs_dir);
+pub fn new(settings: &Settings, args: &ArgMatches, eval_file: &Path) -> Result<()> {
+    let venvs_dir = PathBuf::from(&settings.venvs_dir);
     let venv_name = args.value_of("venv_name").unwrap();
-    venv_dir.push(venv_name); // `venv_name` is a required arg
+    let venv_path = venvs_dir.join(venv_name);
 
-    if venv_dir.exists() {
+    if venv_path.exists() {
         return Err(eyre!("A directory named `{}` already exists", venv_name));
     }
 
@@ -29,7 +30,9 @@ pub fn new(settings: &Settings, args: &ArgMatches) -> Result<()> {
         .args(&[
             "-m",
             "venv",
-            venv_dir.to_str().ok_or_else(|| eyre!("Path to virtualenv contained invalid UTF-8"))?,
+            venv_path
+                .to_str()
+                .ok_or_else(|| eyre!("Path to virtualenv contained invalid UTF-8"))?,
         ])
         .stdout(Stdio::null())
         .output()
@@ -43,6 +46,8 @@ pub fn new(settings: &Settings, args: &ArgMatches) -> Result<()> {
         return Err(eyre!(stderr))
             .context("Could not create the virtualenv with the specified python executable");
     }
+
+    activate(&venvs_dir, venv_name, eval_file)?;
 
     Ok(())
 }

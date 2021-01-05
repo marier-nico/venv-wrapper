@@ -28,9 +28,12 @@ fn cli_main() -> Result<()> {
     let matches = clap_app::get_app().get_matches();
     let settings = settings::Settings::new(&matches)?;
     match matches.subcommand() {
-        ("init", Some(_sub_matches)) => commands::init(eval_file)?,
+        ("init", Some(_sub_matches)) => commands::init(&eval_file)?,
         ("ls", Some(_sub_matches)) => commands::ls(&settings)?,
-        ("new", Some(sub_matches)) => commands::new(&settings, sub_matches)?,
+        ("new", Some(sub_matches)) => commands::new(&settings, sub_matches, &eval_file)?,
+        ("activate", Some(sub_matches)) => {
+            commands::activate_cli(&settings, sub_matches, &eval_file)?
+        }
         _ => return Err(eyre!("Unhandled subcommand")),
     }
 
@@ -41,6 +44,6 @@ fn create_eval_dir() -> Result<PathBuf> {
     let eval_file = directories::BaseDirs::new().unwrap().cache_dir().join("venv-wrapper/eval");
     std::fs::create_dir_all(eval_file.parent().unwrap())
         .context("Could not create cache directory")?;
-    
+
     Ok(eval_file)
 }

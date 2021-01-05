@@ -1,8 +1,8 @@
-use std::{env::current_exe, path::PathBuf};
+use std::{env::current_exe, path::Path};
 
 use eyre::Context;
 
-pub fn init(eval_file: PathBuf) -> eyre::Result<()> {
+pub fn init(eval_file: &Path) -> eyre::Result<()> {
     let current_exe = current_exe().context("Could not determine current executable path")?;
     let s = format!(
         "function venv () {{

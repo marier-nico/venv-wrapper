@@ -21,9 +21,11 @@ impl Settings {
 
         settings.merge(config::File::from(config_file)).ok();
         settings.merge(config::Environment::with_prefix("VENVWRAPPER")).ok();
+        let mut settings =
+            settings.try_into().context("The provided configuration is in an invalid format")?;
         set_cli_overrides(&mut settings, matches)?;
 
-        Ok(settings.try_into().context("The provided configuration is in an invalid format")?)
+        Ok(settings)
     }
 }
 
@@ -44,13 +46,10 @@ fn set_defaults(settings: &mut Config) -> Result<()> {
     Ok(())
 }
 
-fn set_cli_overrides(settings: &mut Config, matches: &ArgMatches) -> Result<()> {
-    let venvs_dir = match matches.value_of("venvs_dir") {
-        Some(dir) => Some(dir),
-        None => None,
-    };
-
-    settings.set("venvs_dir", venvs_dir).context("Could not set the venv-dir value")?;
+fn set_cli_overrides(settings: &mut Settings, matches: &ArgMatches) -> Result<()> {
+    if let Some(venvs_dir) = matches.value_of("venvs_dir") {
+        settings.venvs_dir = venvs_dir.to_string();
+    }
 
     Ok(())
 }

@@ -8,4 +8,4 @@ mod new;
 pub use new::new;
 
 mod activate;
-pub use activate::activate;
+pub use activate::{activate, activate_cli};
