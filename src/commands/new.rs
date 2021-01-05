@@ -5,6 +5,7 @@ use std::process::{Command, Stdio};
 
 use clap::ArgMatches;
 use eyre::{Context, Result};
+use spinners::{Spinner, Spinners};
 
 use crate::settings::Settings;
 
@@ -24,6 +25,8 @@ pub fn new(settings: &Settings, args: &ArgMatches) -> Result<()> {
 
     // TODO: Python2 does not work because the module `venv` doesn't exist
     //       Check the output of the command to make sure it was successful.
+    println!();
+    let spinner = Spinner::new(Spinners::Dots, String::from("Creating your virtual environment"));
     let _cmd = Command::new(python_exec_path)
         .args(&[
             "-m",
@@ -33,8 +36,9 @@ pub fn new(settings: &Settings, args: &ArgMatches) -> Result<()> {
         .stdout(Stdio::null())
         .output()
         .context("Unable to call the python binary to create a virtualenv")?;
+    spinner.stop();
 
-    println!("\n {}  Successfully created the virtualenv `{}`.", Green.paint("✔"), venv_name);
+    println!("\n\n {}  Successfully created the virtualenv `{}`.", Green.paint("✔"), venv_name);
 
     Ok(())
 }
