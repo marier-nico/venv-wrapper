@@ -12,3 +12,6 @@ pub use activate::{activate, activate_cli};
 
 mod deactivate;
 pub use deactivate::deactivate;
+
+mod rm;
+pub use rm::rm;

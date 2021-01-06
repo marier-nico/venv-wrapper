@@ -28,6 +28,10 @@ pub fn get_app<'a, 'b>() -> clap::App<'a, 'b> {
         (@subcommand deactivate =>
             (about: "Deactivate the current virtualenv")
         )
+        (@subcommand rm =>
+            (about: "Remove a virtualenv")
+            (@arg venv_name: +required +takes_value "The name of the virtualenv to delete")
+        )
     )
     .setting(AppSettings::ArgRequiredElseHelp)
 }
