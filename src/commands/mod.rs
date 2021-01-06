@@ -15,3 +15,6 @@ pub use deactivate::deactivate;
 
 mod rm;
 pub use rm::rm;
+
+mod project;
+pub use project::project_main;
