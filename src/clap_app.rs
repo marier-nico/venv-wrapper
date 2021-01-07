@@ -48,7 +48,7 @@ pub fn get_app<'a, 'b>() -> clap::App<'a, 'b> {
         )
         (@subcommand use_command =>
             (name: "use")
-            (about: "Use a virtualenv (activate it, and move to its directory")
+            (about: "Use a virtualenv (activate it, and move to its directory)")
             (@arg venv_name: +required +takes_value "The name of the virtualenv to use")
         )
     )
