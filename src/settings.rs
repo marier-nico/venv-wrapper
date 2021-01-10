@@ -106,10 +106,12 @@ pub struct NewSettings {
 
 impl From<GlobalSettings<'_>> for NewSettings {
     fn from(settings: GlobalSettings) -> Self {
+        let sub_matches = settings.args.subcommand_matches("new").unwrap();
+
         NewSettings {
             venvs_dir: PathBuf::from(&settings.config.venvs_dir),
-            venv_name: settings.args.value_of("venv_name").unwrap().to_owned(),
-            python_executable: settings.args.value_of("python_executable").unwrap().to_owned(),
+            venv_name: sub_matches.value_of("venv_name").unwrap().to_owned(),
+            python_executable: sub_matches.value_of("python_executable").unwrap().to_owned(),
             eval_file: settings.eval_file.to_owned(),
         }
     }
@@ -123,9 +125,11 @@ pub struct ActivateSettings {
 
 impl From<GlobalSettings<'_>> for ActivateSettings {
     fn from(settings: GlobalSettings) -> Self {
+        let sub_matches = settings.args.subcommand_matches("activate").unwrap();
+
         ActivateSettings {
             venvs_dir: PathBuf::from(&settings.config.venvs_dir),
-            venv_name: settings.args.value_of("venv_name").unwrap().to_owned(),
+            venv_name: sub_matches.value_of("venv_name").unwrap().to_owned(),
             eval_file: settings.eval_file.to_owned(),
         }
     }
@@ -150,9 +154,11 @@ pub struct RmSettings {
 
 impl From<GlobalSettings<'_>> for RmSettings {
     fn from(settings: GlobalSettings) -> Self {
+        let sub_matches = settings.args.subcommand_matches("rm").unwrap();
+
         RmSettings {
             venvs_dir: PathBuf::from(&settings.config.venvs_dir),
-            venv_name: settings.args.value_of("venv_name").unwrap().to_owned(),
+            venv_name: sub_matches.value_of("venv_name").unwrap().to_owned(),
         }
     }
 }
@@ -165,9 +171,11 @@ pub struct UseSettings {
 
 impl From<GlobalSettings<'_>> for UseSettings {
     fn from(settings: GlobalSettings) -> Self {
+        let sub_matches = settings.args.subcommand_matches("use").unwrap();
+
         UseSettings {
             venvs_dir: PathBuf::from(&settings.config.venvs_dir),
-            venv_name: settings.args.value_of("venv_name").unwrap().to_owned(),
+            venv_name: sub_matches.value_of("venv_name").unwrap().to_owned(),
             eval_file: settings.eval_file.to_owned(),
         }
     }

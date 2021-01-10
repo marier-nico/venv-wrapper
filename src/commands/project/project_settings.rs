@@ -14,6 +14,13 @@ impl TryFrom<&GlobalSettings<'_>> for ProjectLinkSettings {
     type Error = eyre::Report;
 
     fn try_from(settings: &GlobalSettings) -> Result<ProjectLinkSettings> {
+        let sub_matches = settings
+            .args
+            .subcommand_matches("project")
+            .unwrap()
+            .subcommand_matches("link")
+            .unwrap();
+
         let current_dir = env::current_dir().context("Could not access the current directory")?;
         let current_dir_str = current_dir
             .to_str()
@@ -22,7 +29,7 @@ impl TryFrom<&GlobalSettings<'_>> for ProjectLinkSettings {
 
         Ok(ProjectLinkSettings {
             venvs_dir: PathBuf::from(&settings.config.venvs_dir),
-            venv_name: settings.args.value_of("venv_name").unwrap().to_owned(),
+            venv_name: sub_matches.value_of("venv_name").unwrap().to_owned(),
             project_dir: project_dir.to_owned(),
         })
     }
@@ -35,9 +42,16 @@ pub struct ProjectUnlinkSettings {
 
 impl From<&GlobalSettings<'_>> for ProjectUnlinkSettings {
     fn from(settings: &GlobalSettings) -> Self {
+        let sub_matches = settings
+            .args
+            .subcommand_matches("project")
+            .unwrap()
+            .subcommand_matches("unlink")
+            .unwrap();
+
         ProjectUnlinkSettings {
             venvs_dir: PathBuf::from(&settings.config.venvs_dir),
-            venv_name: settings.args.value_of("venv_name").unwrap().to_owned(),
+            venv_name: sub_matches.value_of("venv_name").unwrap().to_owned(),
         }
     }
 }
