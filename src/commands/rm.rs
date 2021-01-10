@@ -1,6 +1,7 @@
+use ansi_term::Colour::Green;
 use eyre::{Context, Result};
-use std::path::PathBuf;
 use std::env;
+use std::path::PathBuf;
 
 use crate::settings::RmSettings;
 
@@ -23,6 +24,12 @@ pub fn rm(settings: &RmSettings) -> Result<()> {
             venv_path.to_string_lossy()
         ));
     }
+
+    println!(
+        "\n {}  Successfully removed the virtualenv `{}`.",
+        Green.paint("✔"),
+        &settings.venv_name
+    );
 
     Ok(())
 }
