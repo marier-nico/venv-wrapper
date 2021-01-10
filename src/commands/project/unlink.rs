@@ -1,13 +1,10 @@
 use ansi_term::Colour::Green;
-use clap::ArgMatches;
 use eyre::{Context, Result};
-use std::path::PathBuf;
 
-use crate::settings::Settings;
+use super::project_settings::ProjectUnlinkSettings;
 
-pub fn unlink(settings: &Settings, args: &ArgMatches) -> Result<()> {
-    let venv_name = args.value_of("venv_name").unwrap();
-    let venv_path = PathBuf::from(&settings.venvs_dir).join(venv_name);
+pub fn unlink(settings: &ProjectUnlinkSettings) -> Result<()> {
+    let venv_path = &settings.venvs_dir.join(&settings.venv_name);
     let venv_project_file_path = venv_path.join("project_dir");
 
     std::fs::remove_file(&venv_project_file_path)
@@ -16,7 +13,7 @@ pub fn unlink(settings: &Settings, args: &ArgMatches) -> Result<()> {
     println!(
         "\n  {} Successfully unlinked the project from the virtualenv `{}`.",
         Green.paint("✔"),
-        venv_name,
+        &settings.venv_name,
     );
 
     Ok(())

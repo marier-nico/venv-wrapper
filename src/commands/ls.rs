@@ -1,12 +1,10 @@
-use std::path::PathBuf;
-
 use ansi_term::{Colour::Blue, Colour::Green, Colour::Yellow};
 use eyre::{Context, Result};
 
-use crate::settings::Settings;
+use crate::settings::LsSettings;
 
-pub fn ls(settings: &Settings) -> Result<()> {
-    let venvs_dir = PathBuf::from(&settings.venvs_dir);
+pub fn ls(settings: &LsSettings) -> Result<()> {
+    let venvs_dir = &settings.venvs_dir;
 
     let contents = venvs_dir.read_dir();
     if let Err(read_err) = contents {

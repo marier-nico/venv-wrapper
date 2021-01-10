@@ -1,19 +1,13 @@
-use clap::ArgMatches;
 use eyre::{Context, Result};
+use std::fs::OpenOptions;
 use std::io::Write;
-use std::path::Path;
-use std::{fs::OpenOptions, path::PathBuf};
 
-use crate::commands::activate;
-use crate::settings::Settings;
+use crate::{commands::activate, settings::UseSettings};
 
-pub fn use_command(settings: &Settings, args: &ArgMatches, eval_file: &Path) -> Result<()> {
-    let venvs_dir = PathBuf::from(&settings.venvs_dir);
-    let venv_name = args.value_of("venv_name").unwrap(); // `venv_name` is a required arg
+pub fn use_command(settings: &UseSettings) -> Result<()> {
+    activate(&settings.venvs_dir, &settings.venv_name, &settings.eval_file)?;
 
-    activate(&venvs_dir, venv_name, eval_file)?;
-
-    let project_file_path = venvs_dir.join(venv_name).join("project_dir");
+    let project_file_path = &settings.venvs_dir.join(&settings.venv_name).join("project_dir");
     if project_file_path.exists() {
         let project_path = std::fs::read_to_string(project_file_path)
             .context("Could not find the project location")?;
@@ -21,7 +15,7 @@ pub fn use_command(settings: &Settings, args: &ArgMatches, eval_file: &Path) -> 
         let mut file = OpenOptions::new()
             .write(true)
             .append(true)
-            .open(eval_file)
+            .open(&settings.eval_file)
             .context("Unable to open the eval file (cannot modify shell state)")?;
 
         writeln!(file, "\ncd {}", project_path.trim())

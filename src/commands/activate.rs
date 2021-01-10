@@ -1,15 +1,10 @@
-use std::path::{Path, PathBuf};
+use std::path::Path;
 
-use clap::ArgMatches;
-
-use crate::settings::Settings;
+use crate::settings::ActivateSettings;
 use eyre::{Context, Result};
 
-pub fn activate_cli(settings: &Settings, args: &ArgMatches, eval_file: &Path) -> Result<()> {
-    let venvs_dir = PathBuf::from(&settings.venvs_dir);
-    let venv_name = args.value_of("venv_name").unwrap(); // `venv_name` is a required arg
-
-    activate(&venvs_dir, venv_name, eval_file)?;
+pub fn activate_cli(settings: &ActivateSettings) -> Result<()> {
+    activate(&settings.venvs_dir, &settings.venv_name, &settings.eval_file)?;
 
     Ok(())
 }

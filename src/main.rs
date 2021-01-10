@@ -26,18 +26,17 @@ fn cli_main() -> Result<()> {
     let eval_file = create_eval_dir()?;
 
     let matches = clap_app::get_app().get_matches();
-    let settings = settings::Settings::new(&matches)?;
+    let config = settings::ConfigSettings::new(&matches)?;
+    let settings = settings::GlobalSettings::new(config, &matches, &eval_file);
     match matches.subcommand() {
-        ("init", Some(_sub_matches)) => commands::init(&eval_file)?,
-        ("ls", Some(_sub_matches)) => commands::ls(&settings)?,
-        ("new", Some(sub_matches)) => commands::new(&settings, sub_matches, &eval_file)?,
-        ("activate", Some(sub_matches)) => {
-            commands::activate_cli(&settings, sub_matches, &eval_file)?
-        }
-        ("deactivate", Some(_sub_matches)) => commands::deactivate(&eval_file)?,
-        ("rm", Some(sub_matches)) => commands::rm(&settings, sub_matches)?,
-        ("project", Some(sub_matches)) => commands::project_main(&settings, sub_matches)?,
-        ("use", Some(sub_matches)) => commands::use_command(&settings, sub_matches, &eval_file)?,
+        ("init", Some(_sub_matches)) => commands::init(&settings.into())?,
+        ("ls", Some(_sub_matches)) => commands::ls(&settings.into())?,
+        ("new", Some(_sub_matches)) => commands::new(&settings.into())?,
+        ("activate", Some(_sub_matches)) => commands::activate_cli(&settings.into())?,
+        ("deactivate", Some(_sub_matches)) => commands::deactivate(&settings.into())?,
+        ("rm", Some(_sub_matches)) => commands::rm(&settings.into())?,
+        ("project", Some(_sub_matches)) => commands::project_main(&settings)?,
+        ("use", Some(_sub_matches)) => commands::use_command(&settings.into())?,
         _ => return Err(eyre!("Unhandled subcommand")),
     }
 

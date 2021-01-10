@@ -1,8 +1,10 @@
-use std::{env::current_exe, path::Path};
+use std::env::current_exe;
 
 use eyre::Context;
 
-pub fn init(eval_file: &Path) -> eyre::Result<()> {
+use crate::settings::InitSettings;
+
+pub fn init(settings: &InitSettings) -> eyre::Result<()> {
     let current_exe = current_exe().context("Could not determine current executable path")?;
     let s = format!(
         "function venv () {{
@@ -13,7 +15,10 @@ pub fn init(eval_file: &Path) -> eyre::Result<()> {
             fi
         }}",
         bin = current_exe.to_str().ok_or_else(|| eyre!("Path to executable is not valid UTF-8"))?,
-        eval = eval_file.to_str().ok_or_else(|| eyre!("Eval file path was not valid UTF-8"))?
+        eval = settings
+            .eval_file
+            .to_str()
+            .ok_or_else(|| eyre!("Eval file path was not valid UTF-8"))?
     );
 
     print!("{}", s);

@@ -1,15 +1,15 @@
-use clap::ArgMatches;
 use eyre::Result;
+use std::convert::TryInto;
 
-use crate::settings::Settings;
+use crate::settings::GlobalSettings;
 
 use super::link::link;
 use super::unlink::unlink;
 
-pub fn project_main(settings: &Settings, args: &ArgMatches) -> Result<()> {
-    match args.subcommand() {
-        ("link", Some(sub_matches)) => link(&settings, sub_matches)?,
-        ("unlink", Some(sub_matches)) => unlink(&settings, sub_matches)?,
+pub fn project_main(settings: &GlobalSettings) -> Result<()> {
+    match settings.args.subcommand() {
+        ("link", Some(_sub_matches)) => link(&settings.try_into()?)?,
+        ("unlink", Some(_sub_matches)) => unlink(&settings.into())?,
         _ => return Err(eyre!("Unhandled subcommand")),
     }
 

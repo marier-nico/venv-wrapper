@@ -1,27 +1,24 @@
 use ansi_term::Colour::Green;
 use quale::which;
-use std::path::{Path, PathBuf};
 use std::process::{Command, Stdio};
 
-use clap::ArgMatches;
 use eyre::{Context, Result};
 use spinners::{Spinner, Spinners};
 
-use crate::commands::activate;
-use crate::settings::Settings;
+use crate::{commands::activate, settings::NewSettings};
 
-pub fn new(settings: &Settings, args: &ArgMatches, eval_file: &Path) -> Result<()> {
-    let venvs_dir = PathBuf::from(&settings.venvs_dir);
-    let venv_name = args.value_of("venv_name").unwrap();
-    let venv_path = venvs_dir.join(venv_name);
+pub fn new(settings: &NewSettings) -> Result<()> {
+    let venv_path = &settings.venvs_dir.join(&settings.venv_name);
 
     if venv_path.exists() {
-        return Err(eyre!("A directory named `{}` already exists", venv_name));
+        return Err(eyre!("A directory named `{}` already exists", &settings.venv_name));
     }
 
-    let python_exec_name = args.value_of("python_executable").unwrap(); // There is a default value for this arg
-    let python_exec_path = which(python_exec_name).ok_or_else(|| {
-        eyre!("Could not determine the path to the python executable ({})", python_exec_name)
+    let python_exec_path = which(&settings.python_executable).ok_or_else(|| {
+        eyre!(
+            "Could not determine the path to the python executable ({})",
+            &settings.python_executable
+        )
     })?;
 
     println!();
@@ -40,14 +37,18 @@ pub fn new(settings: &Settings, args: &ArgMatches, eval_file: &Path) -> Result<(
     spinner.stop();
 
     if cmd.status.success() {
-        println!("\n\n {}  Successfully created the virtualenv `{}`.", Green.paint("✔"), venv_name);
+        println!(
+            "\n\n {}  Successfully created the virtualenv `{}`.",
+            Green.paint("✔"),
+            &settings.venv_name
+        );
     } else {
         let stderr = String::from_utf8(cmd.stderr)?.trim().to_owned();
         return Err(eyre!(stderr))
             .context("Could not create the virtualenv with the specified python executable");
     }
 
-    activate(&venvs_dir, venv_name, eval_file)?;
+    activate(&settings.venvs_dir, &settings.venv_name, &settings.eval_file)?;
 
     Ok(())
 }
