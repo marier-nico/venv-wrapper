@@ -5,9 +5,9 @@ use std::io::Write;
 use crate::{commands::activate, settings::UseSettings};
 
 pub fn use_command(settings: &UseSettings) -> Result<()> {
-    activate(&settings.venvs_dir, &settings.venv_name, &settings.eval_file)?;
+    activate(&settings.venv, &settings.eval_file)?;
 
-    let project_file_path = &settings.venvs_dir.join(&settings.venv_name).join("project_dir");
+    let project_file_path = &settings.venv.path.join("project_dir");
     if project_file_path.exists() {
         let project_path = std::fs::read_to_string(project_file_path)
             .context("Could not find the project location")?;

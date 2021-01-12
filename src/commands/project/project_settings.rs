@@ -1,12 +1,11 @@
-use std::{convert::TryFrom, env, path::PathBuf};
+use std::{convert::TryFrom, env};
 
-use crate::settings::GlobalSettings;
+use crate::settings::{GlobalSettings, Virtualenv};
 
 use eyre::{Context, Result};
 
 pub struct ProjectLinkSettings {
-    pub venvs_dir: PathBuf,
-    pub venv_name: String,
+    pub venv: Virtualenv,
     pub project_dir: String,
 }
 
@@ -21,6 +20,11 @@ impl TryFrom<&GlobalSettings<'_>> for ProjectLinkSettings {
             .subcommand_matches("link")
             .unwrap();
 
+        let virtualenv = Virtualenv::from_existing(
+            sub_matches.value_of("venv_name").unwrap(),
+            &settings.config.venvs_dir,
+        )?;
+
         let current_dir = env::current_dir().context("Could not access the current directory")?;
         let current_dir_str = current_dir
             .to_str()
@@ -28,20 +32,20 @@ impl TryFrom<&GlobalSettings<'_>> for ProjectLinkSettings {
         let project_dir = settings.args.value_of("project_dir").unwrap_or(&current_dir_str);
 
         Ok(ProjectLinkSettings {
-            venvs_dir: PathBuf::from(&settings.config.venvs_dir),
-            venv_name: sub_matches.value_of("venv_name").unwrap().to_owned(),
+            venv: virtualenv,
             project_dir: project_dir.to_owned(),
         })
     }
 }
 
 pub struct ProjectUnlinkSettings {
-    pub venvs_dir: PathBuf,
-    pub venv_name: String,
+    pub venv: Virtualenv,
 }
 
-impl From<&GlobalSettings<'_>> for ProjectUnlinkSettings {
-    fn from(settings: &GlobalSettings) -> Self {
+impl TryFrom<&GlobalSettings<'_>> for ProjectUnlinkSettings {
+    type Error = eyre::Report;
+
+    fn try_from(settings: &GlobalSettings) -> Result<Self> {
         let sub_matches = settings
             .args
             .subcommand_matches("project")
@@ -49,9 +53,13 @@ impl From<&GlobalSettings<'_>> for ProjectUnlinkSettings {
             .subcommand_matches("unlink")
             .unwrap();
 
-        ProjectUnlinkSettings {
-            venvs_dir: PathBuf::from(&settings.config.venvs_dir),
-            venv_name: sub_matches.value_of("venv_name").unwrap().to_owned(),
-        }
+        let virtualenv = Virtualenv::from_existing(
+            sub_matches.value_of("venv_name").unwrap(),
+            &settings.config.venvs_dir,
+        )?;
+
+        Ok(ProjectUnlinkSettings {
+            venv: virtualenv,
+        })
     }
 }
