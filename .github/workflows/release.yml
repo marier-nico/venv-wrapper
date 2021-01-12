@@ -22,7 +22,7 @@ jobs:
         uses: actions-rs/cargo@v1
         with:
           command: build
-          args: --release
+          args: --release --target-dir ./release
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -41,6 +41,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./target/release
+          asset_path: ./release/release/venv-wrapper
           asset_name: venv-wrapper
           asset_content_type: application/octet-stream
