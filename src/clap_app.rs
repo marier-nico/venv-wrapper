@@ -4,7 +4,7 @@ pub fn get_app<'a, 'b>() -> clap::App<'a, 'b> {
     clap_app!(venv =>
         (name: "venv-wrapper")
         (bin_name: "venv")
-        (version: "0.1.0")
+        (version: "0.1.3")
         (author: "Nicolas Marier <software@nmarier.com>")
         (about: "Virtualenvwrapper, but in rust!")
         (setting: AppSettings::ArgRequiredElseHelp)

@@ -58,8 +58,9 @@ To release a new version, there a few simple steps to follow.
 
 1. Create or edit the `RELEASE_CHANGELOG.md` file (at the repo's root) to contain a changelog for the release.
     - This will be the GitHub release's body
-2. Merge all code to be released into `main`.
-3. Create a new tag pointing to the head of the `main` branch.
+2. Upadte the version in `cargo.toml`, `cargo.lock`, and `clap_app.rs`.
+3. Merge all code to be released into `main`.
+4. Create a new tag pointing to the head of the `main` branch.
     - `git tag -s vX.Y.Z -m "Release vX.Y.Z"`
-4. Push the new tag.
+5. Push the new tag.
     - `git push --tags`
