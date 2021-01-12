@@ -3,8 +3,13 @@ name = "venv-wrapper"
 version = "0.1.0"
 authors = ["Nicolas Marier <software@nmarier.com>"]
 edition = "2018"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+license = "MIT OR Apache-2.0"
+description = "Simple python virtual environment management"
+homepage = "https://github.com/marier-nico/venv-wrapper"
+repository = "https://github.com/marier-nico/venv-wrapper"
+readme = "README.md"
+keywords = ["cli", "python", "venv", "virtualenv"]
+categories = ["command-line-utilities", "development-tools"]
 
 [dependencies]
 ansi_term = "~0.12.1"
