@@ -4,11 +4,6 @@ venv-wrapper is a convenient wrapper around Python's `venv` module. It was inspi
 [virtualenvwrapper](https://bitbucket.org/virtualenvwrapper/virtualenvwrapper/src/master/) project,
 and it aims to be simpler and more convenient to use.
 
-A long-term goal of this project is to re-implement the `venv` module (and perhaps eventually the
-`virtualenv` module as well) in Rust to hopefully speed up virtualenv creation as well. Though, the
-main priority at this time is to add features to match the functionality of the `virtualenvwrapper`
-project.
-
 ## Installation
 
 Coming soon, to [crates.io](https://crates.io/), the AUR, a PPA and homebrew!
