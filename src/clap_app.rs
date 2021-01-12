@@ -13,7 +13,7 @@ pub fn get_app<'a, 'b>() -> clap::App<'a, 'b> {
 
         (@subcommand init =>
             (about: "Prepare the shell for use")
-            (long_about: 
+            (long_about:
                 "Output a shell function to STDOUT to allow venv-wrapper to modify the shell state. \
                 The function that is output and evaluated essentially runs the venv-wrapper \
                 binary and evals the contents of a file that is written to by venv-wrapper itself (to modify the shell's state). \
@@ -37,7 +37,7 @@ pub fn get_app<'a, 'b>() -> clap::App<'a, 'b> {
         )
         (@subcommand rm =>
             (about: "Remove a virtualenv")
-            (long_about: 
+            (long_about:
                 "Remove a virtualenv. The currently active virtualenv cannot be removed with this method. \
                 You should deactivate the current virtualenv first, if that is the one you would like to remove. \
                 Also, to make accidental data loss more difficult, only a directory containg a `bin` \
@@ -69,7 +69,7 @@ pub fn get_app<'a, 'b>() -> clap::App<'a, 'b> {
         (@subcommand use_command =>
             (name: "use")
             (about: "Use a virtualenv (activate it, and move to its directory)")
-            (long_about: 
+            (long_about:
                 "Use a virtualenv (begin working on the project associated with it, if any). \
                 If no project is associated with the virtualenv, it is only activated. \
                 If a project is associated with it, the current shell will move to the project's \
