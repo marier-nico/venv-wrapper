@@ -6,7 +6,19 @@ and it aims to be simpler and more convenient to use.
 
 ## Installation
 
-Coming soon, to [crates.io](https://crates.io/), the AUR, a PPA and homebrew!
+### Cargo and crates.io
+
+1. Install rust (https://www.rust-lang.org/tools/install).
+2. Add the `cargo` bin path to your `PATH` environment variable.
+    - Usually the bin path is `~/.cargo/bin`.
+3. Run `cargo install venv-wrapper`.
+4. Add `eval "$(venv-wrapper init)"` to your shell init script (`~/.bashrc`, `~/.zshrc`, etc.)
+5. Restart your shell.
+6. You can now run `venv ls` to verify the installation is working.
+
+### AUR, PPA, Homebrew
+
+Coming soon!
 
 ## Configuration
 
