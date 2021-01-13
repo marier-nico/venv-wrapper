@@ -100,7 +100,7 @@ jobs:
       - name: Save AUR SSH Key
         run: echo "${{ secrets.AUR_SSH_KEY_BASE64 }}" | base64 -d > ./aur_ssh_key
       - name: Clone AUR Repo
-        run: GIT_SSH_COMMAND="ssh -i ./aur_ssh_key" git clone ssh://aur@aur.archlinux.org/venv-wrapper-bin.git
+        run: GIT_SSH_COMMAND="ssh -i ./aur_ssh_key -o StrictHostKeyChecking=no" git clone ssh://aur@aur.archlinux.org/venv-wrapper-bin.git
       - name: Show Directory Info
         run: |
           pwd
@@ -114,6 +114,6 @@ jobs:
           cp ${{ github.workspace }}/venv-wrapper-bin/.SRCINFO ./
           git add .
           git commit -m "Update to version ${{ steps.get_release_version.outputs.release_version }}"
-          GIT_SSH_COMMAND="ssh -i ${{ github.workspace }}/aur_ssh_key" git push
+          GIT_SSH_COMMAND="ssh -i ./aur_ssh_key -o StrictHostKeyChecking=no" git push
       - name: Remove SSH key
         run: rm ${{ github.workspace }}/aur_ssh_key
