@@ -74,6 +74,8 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
+        with:
+          path: venv-wrapper
       - name: Download Latest Binary
         run: curl -Lo venv-wrapper ${{ needs.create_release.outputs.binary_download_url }}
       - name: Get Binary SHA256
@@ -87,20 +89,23 @@ jobs:
       - name: Add Build User
         run: useradd build && chown -R build:build ./
       - name: Generate Package Info
-        working-directory: ./packaging
+        working-directory: ${{ github.workspace }}/venv-wrapper/packaging
         run: |
           PKGVER=${{ steps.get_release_version.outputs.release_version }} SHA256SUM=${{ steps.get_binary_sha256.outputs.bin_sha256 }} ./gen_pkgbuild.sh > PKGBUILD
           su build -c 'makepkg --printsrcinfo > .SRCINFO'
-      - name: Update AUR Repo
+      - name: Clone AUR Repo
         uses: actions/checkout@v2
         with:
           repository: ssh://aur@aur.archlinux.org/venv-wrapper-bin.git
           ssh-key: ${{ secrets.AUR_SSH_KEY }}
+          path: venv-wrapper-bin
+      - name: Update AUR Package
+        working-directory: ${{ github.workspace }}/venv-wrapper-bin
         run: |
           git config user.name github-actions
           git config user.email noreply@github.com
-          cp ../PKGBUILD ./
-          cp ../.SRCINFO ./
+          cp ${{ github.workspace }}/venv-wrapper-bin/PKGBUILD ./
+          cp ${{ github.workspace }}/venv-wrapper-bin/.SRCINFO ./
           git add .
           git commit -m "Update to version ${{ steps.get_release_version.outputs.release_version }}"
           git push
