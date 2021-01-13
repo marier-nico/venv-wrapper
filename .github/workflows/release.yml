@@ -96,11 +96,11 @@ jobs:
         with:
           repository: ssh://aur@aur.archlinux.org/venv-wrapper-bin.git
           ssh-key: ${{ secrets.AUR_SSH_KEY }}
-          run: |
-            git config user.name github-actions
-            git config user.email noreply@github.com
-            cp ../PKGBUILD ./
-            cp ../.SRCINFO ./
-            git add .
-            git commit -m "Update to version ${{ steps.get_release_version.outputs.release_version }}"
-            git push
+        run: |
+          git config user.name github-actions
+          git config user.email noreply@github.com
+          cp ../PKGBUILD ./
+          cp ../.SRCINFO ./
+          git add .
+          git commit -m "Update to version ${{ steps.get_release_version.outputs.release_version }}"
+          git push
