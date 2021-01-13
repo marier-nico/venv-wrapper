@@ -70,7 +70,9 @@ jobs:
     needs: [create_release]
     name: Publishto AUR
     runs-on: ubuntu-latest
-    container: archlinux:latest
+    container:
+      image: archlinux:latest
+      options: --user 1001
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
@@ -85,7 +87,9 @@ jobs:
         run: useradd build && chown -R build:build ./
       - name: Generate Package Info
         working-directory: ./packaging
-        run: su build && PKGVER=${{ github.ref }} SHA256SUM=${{ steps.get_binary_sha256.outputs.bin_sha256 }} ./gen_pkgbuild.sh > PKGBUILD && makepkg --printsrcinfo > .SRCINFO
+        run: |
+          PKGVER=${{ github.ref }} SHA256SUM=${{ steps.get_binary_sha256.outputs.bin_sha256 }} ./gen_pkgbuild.sh > PKGBUILD
+          makepkg --printsrcinfo > .SRCINFO
       - name: Show Output
         run: cat PKGBUILD && cat .SRCINFO
         working-directory: ./packaging
