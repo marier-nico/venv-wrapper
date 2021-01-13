@@ -85,7 +85,7 @@ jobs:
         id: get_release_version
         run: echo ::set-output name=release_version::$(echo "${{ github.ref }}" | grep -oh "[[:digit:]]\.[[:digit:]]\.[[:digit:]]")
       - name: Install Git & Binutils & SSH
-        run: pacman --noconfirm -Sy && pacman --noconfirm -S git binutils ssh
+        run: pacman --noconfirm -Sy && pacman --noconfirm -S git binutils openssh
       - name: Add Build User
         run: useradd build && chown -R build:build ./
       - name: Generate Package Info
