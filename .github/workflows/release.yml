@@ -93,12 +93,12 @@ jobs:
         run: |
           PKGVER=${{ steps.get_release_version.outputs.release_version }} SHA256SUM=${{ steps.get_binary_sha256.outputs.bin_sha256 }} ./gen_pkgbuild.sh > PKGBUILD
           su build -c 'makepkg --printsrcinfo > .SRCINFO'
+      - name: Save AUR SSH Key
+        run: |
+          echo "${{ secrets.AUR_SSH_KEY }}" > ${{ github.workspace }}/aur_ssh_key
+          chmod 600 ${{ github.workspace }}/aur_ssh_key
       - name: Clone AUR Repo
-        uses: actions/checkout@v2
-        with:
-          repository: ssh://aur@aur.archlinux.org/venv-wrapper-bin.git
-          ssh-key: ${{ secrets.AUR_SSH_KEY }}
-          path: venv-wrapper-bin
+        run: GIT_SSH_COMMAND="ssh -i ${{ github.workspace }}/aur_ssh_key" git clone ssh://aur@aur.archlinux.org/venv-wrapper-bin.git ${{ github.workspace }}/venv-wrapper-bin
       - name: Update AUR Package
         working-directory: ${{ github.workspace }}/venv-wrapper-bin
         run: |
@@ -108,4 +108,6 @@ jobs:
           cp ${{ github.workspace }}/venv-wrapper-bin/.SRCINFO ./
           git add .
           git commit -m "Update to version ${{ steps.get_release_version.outputs.release_version }}"
-          git push
+          GIT_SSH_COMMAND="ssh -i ${{ github.workspace }}/aur_ssh_key" git push
+      - name: Remove SSH key
+        run: rm ${{ github.workspace }}/aur_ssh_key
