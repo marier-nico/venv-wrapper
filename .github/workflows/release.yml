@@ -85,8 +85,12 @@ jobs:
         run: pacman --noconfirm -Sy && pacman --noconfirm -S git binutils
       - name: Add Build User
         run: useradd build && chown -R build:build ./ && su build
+      - name: List Files
+        run: ls -lah
       - name: Move to Packaging Directory
         run: cd packaging
+      - name: List Files
+        run: ls -lah
       - name: Generate PKGBUILD
         run: PKGVER=${{ github.ref }} SHA256SUM=${{ steps.get_binary_sha256.outputs.bin_sha256 }} ./gen_pkgbuild.sh > PKGBUILD
       - name: Generate SRCINFO
