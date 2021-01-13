@@ -1,9 +1,11 @@
 #!/bin/bash
 
+pkgver=$(echo "$PKGVER" | grep -oh "[[:digit:]]\.[[:digit:]]\.[[:digit:]]")
+
 read -d '' PKGBUILD << EOF
 # Maintainer: Nicolas Marier <aur at nmarier dot com>
 pkgname=venv-wrapper-bin
-pkgver=$PKGVER
+pkgver=$pkgver
 pkgrel=1
 pkgdesc='Simple python virtual environment management'
 url='https://github.com/marier-nico/venv-wrapper'
