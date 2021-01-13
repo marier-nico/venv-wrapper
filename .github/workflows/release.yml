@@ -99,10 +99,14 @@ jobs:
           ls -lah
       - name: Save AUR SSH Key
         run: |
-          echo "${{ secrets.AUR_SSH_KEY_BASE64 }}" | base64 -d > ${{ github.workspace }}/aur_ssh_key
+          echo "${{ secrets.AUR_SSH_KEY_BASE64 }}" | base64 -d > ./aur_ssh_key
           chmod 600 ${{ github.workspace }}/aur_ssh_key
       - name: Clone AUR Repo
-        run: GIT_SSH_COMMAND="ssh -i ${{ github.workspace }}/aur_ssh_key" git clone ssh://aur@aur.archlinux.org/venv-wrapper-bin.git ${{ github.workspace }}/venv-wrapper-bin
+        run: GIT_SSH_COMMAND="ssh -i ./aur_ssh_key" git clone ssh://aur@aur.archlinux.org/venv-wrapper-bin.git
+      - name: Show Directory Info
+        run: |
+          pwd
+          ls -lah
       - name: Update AUR Package
         working-directory: ${{ github.workspace }}/venv-wrapper-bin
         run: |
