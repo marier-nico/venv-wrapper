@@ -93,6 +93,10 @@ jobs:
         run: |
           PKGVER=${{ steps.get_release_version.outputs.release_version }} SHA256SUM=${{ steps.get_binary_sha256.outputs.bin_sha256 }} ./gen_pkgbuild.sh > PKGBUILD
           su build -c 'makepkg --printsrcinfo > .SRCINFO'
+      - name: Show Directory Info
+        run: |
+          pwd
+          ls -lah
       - name: Save AUR SSH Key
         run: |
           echo "${{ secrets.AUR_SSH_KEY_BASE64 }}" | base64 -d > ${{ github.workspace }}/aur_ssh_key
