@@ -82,13 +82,13 @@ jobs:
       - name: Install Git & Binutils
         run: pacman --noconfirm -Sy && pacman --noconfirm -S git binutils
       - name: Add Build User
-        run: useradd build && chown -R build:build ./ && su build
-      - name: Generate PKGBUILD
-        run: PKGVER=${{ github.ref }} SHA256SUM=${{ steps.get_binary_sha256.outputs.bin_sha256 }} ./gen_pkgbuild.sh > PKGBUILD
+        run: useradd build && chown -R build:build ./
+      - name: Generate Package Info
         working-directory: ./packaging
-      - name: Generate SRCINFO
-        run: makepkg --printsrcinfo > .SRCINFO
-        working-directory: ./packaging
+        run: |
+          su build
+          PKGVER=${{ github.ref }} SHA256SUM=${{ steps.get_binary_sha256.outputs.bin_sha256 }} ./gen_pkgbuild.sh > PKGBUILD
+          makepkg --printsrcinfo > .SRCINFO
       - name: Show Output
         run: cat PKGBUILD && cat .SRCINFO
         working-directory: ./packaging
