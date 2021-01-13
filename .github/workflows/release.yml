@@ -77,10 +77,10 @@ jobs:
         with:
           path: venv-wrapper
       - name: Download Latest Binary
-        run: curl -Lo venv-wrapper ${{ needs.create_release.outputs.binary_download_url }}
+        run: curl -Lo venv-wrapper-compiled ${{ needs.create_release.outputs.binary_download_url }}
       - name: Get Binary SHA256
         id: get_binary_sha256
-        run: echo ::set-output name=bin_sha256::$(sha256sum venv-wrapper | cut -d ' ' -f1)
+        run: echo ::set-output name=bin_sha256::$(sha256sum venv-wrapper-compiled | cut -d ' ' -f1)
       - name: Get Release Version
         id: get_release_version
         run: echo ::set-output name=release_version::$(echo "${{ github.ref }}" | grep -oh "[[:digit:]]\.[[:digit:]]\.[[:digit:]]")
