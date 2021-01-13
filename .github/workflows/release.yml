@@ -1,4 +1,4 @@
-name: Create Release
+name: Release New Version
 
 on:
   push:
@@ -7,8 +7,11 @@ on:
 
 jobs:
   create_release:
+    id: create_release
     name: Create Release
     runs-on: ubuntu-latest
+    outputs:
+      binary_download_url: ${{ steps.upload_release_asset.outputs.browser_download_url }}
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
@@ -44,3 +47,50 @@ jobs:
           asset_path: ./release/release/venv-wrapper
           asset_name: venv-wrapper
           asset_content_type: application/octet-stream
+  
+  #publish_crates_io:
+  #  needs: [create_release]
+  #  name: Publish to crates.io
+  #  runs-on: ubuntu-latest
+  #  steps:
+  #    - name: Checkout Code
+  #      uses: actions/checkout@v2
+  #    - name: Install Rust Tools
+  #      uses: actions-rs/toolchain@v1
+  #      with:
+  #        profile: minimal
+  #        toolchain: stable
+  #        override: true
+  #    - name: Publish to crates.io
+  #      uses: actions-rs/cargo@v1
+  #      with:
+  #        command: publish
+  #        args: --token ${{ secrets.CRATES_IO_API_TOKEN }}
+  
+  publish_aur:
+    needs: [create_release]
+    name: Publishto AUR
+    runs-on: ubuntu-latest
+    container: archlinux:latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+      - name: Download Latest Binary
+        run: curl -Lo venv-wrapper ${{ needs.create_release.outputs.binary_download_url }}
+      - name: Get Binary SHA256
+        id: get_binary_sha256
+        run: echo ::set-output name=bin_sha256::$(sha256sum venv-wrapper | cut -d ' ' -f1)
+      - name: List Files
+        run: ls -lah
+      - name: Install Git & Binutils
+        run: pacman --noconfirm -Sy && pacman --noconfirm -S git binutils
+      - name: Add Build User
+        run: useradd build && chown -R build:build ./ && su build
+      - name: Move to Packaging Directory
+        run: cd packaging
+      - name: Generate PKGBUILD
+        run: PKGVER=${{ github.ref }} SHA256SUM=${{ steps.get_binary_sha256.outputs.bin_sha256 }} ./gen_pkgbuild.sh > PKGBUILD
+      - name: Generate SRCINFO
+        run: makepkg --printsrcinfo > .SRCINFO
+      - name: List Files
+        run: ls -lah
