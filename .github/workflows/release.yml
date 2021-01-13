@@ -79,6 +79,9 @@ jobs:
       - name: Get Binary SHA256
         id: get_binary_sha256
         run: echo ::set-output name=bin_sha256::$(sha256sum venv-wrapper | cut -d ' ' -f1)
+      - name: Get Release Version
+        id: get_release_version
+        run: echo ::set-output name=release_version::$(echo "${{ github.ref }}" | grep -oh "[[:digit:]]\.[[:digit:]]\.[[:digit:]]")
       - name: Install Git & Binutils
         run: pacman --noconfirm -Sy && pacman --noconfirm -S git binutils
       - name: Add Build User
@@ -86,9 +89,18 @@ jobs:
       - name: Generate Package Info
         working-directory: ./packaging
         run: |
-          PKGVER=${{ github.ref }} SHA256SUM=${{ steps.get_binary_sha256.outputs.bin_sha256 }} ./gen_pkgbuild.sh > PKGBUILD
-          cat PKGBUILD
+          PKGVER=${{ steps.get_release_version.outputs.release_version }} SHA256SUM=${{ steps.get_binary_sha256.outputs.bin_sha256 }} ./gen_pkgbuild.sh > PKGBUILD
           su build -c 'makepkg --printsrcinfo > .SRCINFO'
-      - name: Show Output
-        run: cat PKGBUILD && cat .SRCINFO
-        working-directory: ./packaging
+      - name: Update AUR Repo
+        uses: actions/checkout@v2
+        with:
+          repository: ssh://aur@aur.archlinux.org/venv-wrapper-bin.git
+          ssh-key: ${{ secrets.AUR_SSH_KEY }}
+          run: |
+            git config user.name github-actions
+            git config user.email noreply@github.com
+            cp ../PKGBUILD ./
+            cp ../.SRCINFO ./
+            git add .
+            git commit -m "Update to version ${{ steps.get_release_version.outputs.release_version }}"
+            git push
