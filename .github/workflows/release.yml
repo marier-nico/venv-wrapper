@@ -98,9 +98,7 @@ jobs:
           pwd
           ls -lah
       - name: Save AUR SSH Key
-        run: |
-          echo "${{ secrets.AUR_SSH_KEY_BASE64 }}" | base64 -d > ./aur_ssh_key
-          chmod 600 ${{ github.workspace }}/aur_ssh_key
+        run: echo "${{ secrets.AUR_SSH_KEY_BASE64 }}" | base64 -d > ./aur_ssh_key
       - name: Clone AUR Repo
         run: GIT_SSH_COMMAND="ssh -i ./aur_ssh_key" git clone ssh://aur@aur.archlinux.org/venv-wrapper-bin.git
       - name: Show Directory Info
