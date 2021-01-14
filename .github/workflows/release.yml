@@ -108,8 +108,8 @@ jobs:
         run: |
           git config user.name github-actions
           git config user.email noreply@github.com
-          cp ${{ github.workspace }}/venv-wrapper-bin/PKGBUILD ./
-          cp ${{ github.workspace }}/venv-wrapper-bin/.SRCINFO ./
+          cp ${{ github.workspace }}/venv-wrapper/PKGBUILD ./
+          cp ${{ github.workspace }}/venv-wrapper/.SRCINFO ./
           git add .
           git commit -m "Update to version ${{ steps.get_release_version.outputs.release_version }}"
           GIT_SSH_COMMAND="ssh -i ./aur_ssh_key -o StrictHostKeyChecking=no" git push
