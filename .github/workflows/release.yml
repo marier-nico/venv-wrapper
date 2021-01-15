@@ -112,6 +112,6 @@ jobs:
           git config user.email noreply@github.com
           git add .
           git commit -m "Update to version ${{ steps.get_release_version.outputs.release_version }}"
-          GIT_SSH_COMMAND="ssh -i ./aur_ssh_key -o StrictHostKeyChecking=no" git push
+          GIT_SSH_COMMAND="ssh -i ../aur_ssh_key -o StrictHostKeyChecking=no" git push
       - name: Remove SSH key
         run: rm ${{ github.workspace }}/aur_ssh_key
