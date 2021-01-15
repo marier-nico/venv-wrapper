@@ -105,8 +105,8 @@ jobs:
           ls -lah
           ls -lah venv-wrapper
           ls -lah venv-wrapper-bin
-          cp venv-wrapper/PKGBUILD venv-wrapper-bin/
-          cp venv-wrapper/.SRCINFO venv-wrapper-bin/
+          cp venv-wrapper/packaging/PKGBUILD venv-wrapper-bin/
+          cp venv-wrapper/packaging/.SRCINFO venv-wrapper-bin/
           cd venv-wrapper-bin
           git config user.name github-actions
           git config user.email noreply@github.com
