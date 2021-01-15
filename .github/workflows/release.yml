@@ -103,6 +103,8 @@ jobs:
         run: |
           pwd
           ls -lah
+          ls -lah venv-wrapper
+          ls -lah venv-wrapper-bin
           cp venv-wrapper/PKGBUILD venv-wrapper-bin/
           cp venv-wrapper/.SRCINFO venv-wrapper-bin/
           cd venv-wrapper-bin
