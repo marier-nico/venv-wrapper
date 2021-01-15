@@ -101,10 +101,6 @@ jobs:
         run: GIT_SSH_COMMAND="ssh -i ./aur_ssh_key -o StrictHostKeyChecking=no" git clone ssh://aur@aur.archlinux.org/venv-wrapper-bin.git
       - name: Update AUR Package
         run: |
-          pwd
-          ls -lah
-          ls -lah venv-wrapper
-          ls -lah venv-wrapper-bin
           cp venv-wrapper/packaging/PKGBUILD venv-wrapper-bin/
           cp venv-wrapper/packaging/.SRCINFO venv-wrapper-bin/
           cd venv-wrapper-bin
@@ -114,4 +110,4 @@ jobs:
           git commit -m "Update to version ${{ steps.get_release_version.outputs.release_version }}"
           GIT_SSH_COMMAND="ssh -i ../aur_ssh_key -o StrictHostKeyChecking=no" git push
       - name: Remove SSH key
-        run: rm ${{ github.workspace }}/aur_ssh_key
+        run: rm aur_ssh_key
