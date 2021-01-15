@@ -1,4 +1,4 @@
-name: Create Release
+name: Release New Version
 
 on:
   push:
@@ -9,6 +9,8 @@ jobs:
   create_release:
     name: Create Release
     runs-on: ubuntu-latest
+    outputs:
+      binary_download_url: ${{ steps.upload_release_asset.outputs.browser_download_url }}
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
@@ -44,3 +46,68 @@ jobs:
           asset_path: ./release/release/venv-wrapper
           asset_name: venv-wrapper
           asset_content_type: application/octet-stream
+  
+  #publish_crates_io:
+  #  needs: [create_release]
+  #  name: Publish to crates.io
+  #  runs-on: ubuntu-latest
+  #  steps:
+  #    - name: Checkout Code
+  #      uses: actions/checkout@v2
+  #    - name: Install Rust Tools
+  #      uses: actions-rs/toolchain@v1
+  #      with:
+  #        profile: minimal
+  #        toolchain: stable
+  #        override: true
+  #    - name: Publish to crates.io
+  #      uses: actions-rs/cargo@v1
+  #      with:
+  #        command: publish
+  #        args: --token ${{ secrets.CRATES_IO_API_TOKEN }}
+  
+  publish_aur:
+    needs: [create_release]
+    name: Publishto AUR
+    runs-on: ubuntu-latest
+    container: archlinux:latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+        with:
+          path: venv-wrapper
+      - name: Download Latest Binary
+        run: curl -Lo venv-wrapper-compiled ${{ needs.create_release.outputs.binary_download_url }}
+      - name: Get Binary SHA256
+        id: get_binary_sha256
+        run: echo ::set-output name=bin_sha256::$(sha256sum venv-wrapper-compiled | cut -d ' ' -f1)
+      - name: Get Release Version
+        id: get_release_version
+        run: echo ::set-output name=release_version::$(echo "${{ github.ref }}" | grep -oh "[[:digit:]]\.[[:digit:]]\.[[:digit:]]")
+      - name: Install Git & Binutils & SSH
+        run: pacman --noconfirm -Sy && pacman --noconfirm -S git binutils openssh
+      - name: Add Build User
+        run: useradd build && chown -R build:build ./
+      - name: Generate Package Info
+        working-directory: ${{ github.workspace }}/venv-wrapper/packaging
+        run: |
+          PKGVER=${{ steps.get_release_version.outputs.release_version }} SHA256SUM=${{ steps.get_binary_sha256.outputs.bin_sha256 }} ./gen_pkgbuild.sh > PKGBUILD
+          su build -c 'makepkg --printsrcinfo > .SRCINFO'
+      - name: Save AUR SSH Key
+        run: echo "${{ secrets.AUR_SSH_KEY_BASE64 }}" | base64 -d > ./aur_ssh_key
+      - name: Set SSH Key Permissions
+        run: chmod 600 ./aur_ssh_key
+      - name: Clone AUR Repo
+        run: GIT_SSH_COMMAND="ssh -i ./aur_ssh_key -o StrictHostKeyChecking=no" git clone ssh://aur@aur.archlinux.org/venv-wrapper-bin.git
+      - name: Update AUR Package
+        run: |
+          cp venv-wrapper/packaging/PKGBUILD venv-wrapper-bin/
+          cp venv-wrapper/packaging/.SRCINFO venv-wrapper-bin/
+          cd venv-wrapper-bin
+          git config user.name github-actions
+          git config user.email noreply@github.com
+          git add .
+          git commit -m "Update to version ${{ steps.get_release_version.outputs.release_version }}"
+          GIT_SSH_COMMAND="ssh -i ../aur_ssh_key -o StrictHostKeyChecking=no" git push
+      - name: Remove SSH key
+        run: rm aur_ssh_key
