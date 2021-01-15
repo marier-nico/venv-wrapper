@@ -47,24 +47,24 @@ jobs:
           asset_name: venv-wrapper
           asset_content_type: application/octet-stream
   
-  #publish_crates_io:
-  #  needs: [create_release]
-  #  name: Publish to crates.io
-  #  runs-on: ubuntu-latest
-  #  steps:
-  #    - name: Checkout Code
-  #      uses: actions/checkout@v2
-  #    - name: Install Rust Tools
-  #      uses: actions-rs/toolchain@v1
-  #      with:
-  #        profile: minimal
-  #        toolchain: stable
-  #        override: true
-  #    - name: Publish to crates.io
-  #      uses: actions-rs/cargo@v1
-  #      with:
-  #        command: publish
-  #        args: --token ${{ secrets.CRATES_IO_API_TOKEN }}
+  publish_crates_io:
+    needs: [create_release]
+    name: Publish to crates.io
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+      - name: Install Rust Tools
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+      - name: Publish to crates.io
+        uses: actions-rs/cargo@v1
+        with:
+          command: publish
+          args: --token ${{ secrets.CRATES_IO_API_TOKEN }}
   
   publish_aur:
     needs: [create_release]
