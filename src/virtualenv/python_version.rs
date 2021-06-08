@@ -1,5 +1,5 @@
-use eyre::{eyre, Error as EyreError};
-use std::{convert::TryFrom, num::ParseIntError};
+use eyre::{eyre, Context, Error as EyreError, Result};
+use std::{convert::TryFrom, num::ParseIntError, path::Path, process::Command};
 
 pub struct PythonVersion {
     pub major: u8,
@@ -30,6 +30,20 @@ impl PythonVersion {
 
     pub fn executable_names(&self) -> Vec<String> {
         return vec![self.minor_prefix(), self.major_prefix(), PythonVersion::prefix()];
+    }
+
+    pub fn try_from_interpreter(interpreter: &Path) -> Result<Self> {
+        let result = Command::new(interpreter)
+            .arg("-c")
+            .arg("import sys; print(f'{sys.version_info[0]}.{sys.version_info[1]}.{sys.version_info[2]}')")
+            .output()
+            .wrap_err("Could not determine the full python version")?;
+
+        let stdout = String::from_utf8_lossy(&result.stdout);
+        let trimmed = stdout.trim();
+        let parsed = Self::try_from(trimmed)?;
+
+        Ok(parsed)
     }
 }
 

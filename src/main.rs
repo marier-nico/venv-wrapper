@@ -1,29 +1,20 @@
-use std::{convert::TryFrom, path::Path};
+use std::convert::TryFrom;
 
-use virtualenv::{
-    create_virtualenv, file_adder::get_file_adder, python_adder::get_python_adder,
-    python_version::PythonVersion, venv_directory_creator::get_directory_creator,
-};
+use cli::get_app::get_app;
+use config::config_data::Config;
+
+use crate::cli::cli_main::cli_main;
 
 mod cli;
+mod config;
 mod virtualenv;
 
 fn main() {
-    let directory_creator = get_directory_creator().unwrap();
-    let file_adder = get_file_adder();
-    let interpreter = Path::new("/usr/bin/python3.9");
-    let python_adder = get_python_adder().unwrap();
-    let python_version = PythonVersion::try_from("3.9.5").unwrap();
-    let venv_root = Path::new("/home/nmarier/Documents/Software/Projects/venv-wrapper/venv");
+    let matches = get_app().get_matches();
+    let cli_config = Config::try_from(&matches).unwrap();
+    let config = Config::merge(vec![Config::default(), cli_config]);
 
-    let result = create_virtualenv(
-        &*directory_creator,
-        &*file_adder,
-        interpreter,
-        &*python_adder,
-        &python_version,
-        venv_root,
-    );
+    let result = cli_main(&matches, &config);
     if let Err(e) = result {
         print!("{:?}", e);
     }

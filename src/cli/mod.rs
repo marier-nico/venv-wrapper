@@ -1,2 +1,2 @@
 pub mod cli_main;
-mod get_app;
+pub mod get_app;

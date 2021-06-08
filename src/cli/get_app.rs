@@ -9,7 +9,7 @@ pub fn get_app<'a, 'b>() -> clap::App<'a, 'b> {
         (about: "Python virtualenv management")
         (setting: AppSettings::ArgRequiredElseHelp)
 
-        (@arg venvs_dir: !required +takes_value -d --("venvs-dir") "Set the location to store virtualenvs in [default: ~/.virtualenvs]")
+        (@arg venv_root: !required +takes_value -r --("venv-root") "Set the location to store virtualenvs in [default: ~/.virtualenvs]")
 
         (@subcommand new =>
             (about: "Create a new virtual environment")

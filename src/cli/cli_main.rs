@@ -1,9 +1,11 @@
-use eyre::Result;
+use clap::ArgMatches;
+use eyre::{eyre, Result};
 
-use super::get_app::get_app;
+use crate::{config::config_data::Config, virtualenv::create_virtualenv};
 
-pub fn cli_main() -> Result<()> {
-    let matches = get_app().get_matches();
-
-    panic!("Not Implemented")
+pub fn cli_main(matches: &ArgMatches, config: &Config) -> Result<()> {
+    match matches.subcommand() {
+        ("new", Some(_sub_matches)) => create_virtualenv(config),
+        _ => Err(eyre!("Unknown command")),
+    }
 }

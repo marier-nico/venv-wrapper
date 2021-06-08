@@ -7,10 +7,10 @@ use os_str_bytes::OsStrBytes;
 pub fn write_venv_config(
     interpreter: &Path,
     python_version: &PythonVersion,
-    venv_root: &Path,
+    venv_path: &Path,
 ) -> Result<()> {
     let mut config_file =
-        File::create(venv_root.join("pyvenv.cfg")).wrap_err("Could not create venv config file")?;
+        File::create(venv_path.join("pyvenv.cfg")).wrap_err("Could not create venv config file")?;
 
     let mut buf: Vec<u8> = vec![];
     buf.extend(b"home = ");

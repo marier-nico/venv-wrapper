@@ -1,14 +1,16 @@
 use std::{path::Path, process::Command};
 
-use eyre::Result;
+use eyre::{Context, Result};
 
-pub fn install_pip(venv_root: &Path) -> Result<()> {
-    Command::new(venv_root.join("bin/python"))
+#[cfg(target_family = "unix")]
+pub fn install_pip(venv_path: &Path) -> Result<()> {
+    Command::new(venv_path.join("bin/python"))
         .arg("-Im")
         .arg("ensurepip")
         .arg("--upgrade")
         .arg("--default-pip")
-        .output()?;
-    
+        .output()
+        .wrap_err("Could not install pip in the venv")?;
+
     Ok(())
 }

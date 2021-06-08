@@ -9,7 +9,7 @@ pub trait VenvDirectoryCreator {
         &self,
         file_adder: &dyn FileAdder,
         python_version: &PythonVersion,
-        venv_root: &Path,
+        venv_path: &Path,
     ) -> Result<()>;
 }
 
@@ -19,18 +19,18 @@ impl VenvDirectoryCreator for LinuxVenvDirectoryCreator {
         &self,
         file_adder: &dyn FileAdder,
         python_version: &PythonVersion,
-        venv_root: &Path,
+        venv_path: &Path,
     ) -> Result<()> {
         let sub_dirs =
             ["bin", "include", &format!("lib/{}/site-packages", python_version.minor_prefix())];
 
         for dir in sub_dirs.iter() {
-            fs::create_dir_all(venv_root.join(dir))
+            fs::create_dir_all(venv_path.join(dir))
                 .wrap_err(format!("Could not create venv directory {}", dir))?;
         }
 
         file_adder
-            .add_file(&venv_root.join("lib"), &venv_root.join("lib64"))
+            .add_file(&venv_path.join("lib"), &venv_path.join("lib64"))
             .wrap_err("Could not link lib64 to lib")?;
 
         Ok(())
