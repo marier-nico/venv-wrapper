@@ -66,6 +66,7 @@ impl TryFrom<&str> for PythonVersion {
     /// An error is returned if the version string does not include all the required version
     /// information or if it isn't in theh correct format.
     fn try_from(value: &str) -> Result<Self, Self::Error> {
+        let value = value.trim();
         let parsed: Vec<Result<u8, ParseIntError>> =
             value.split('.').map(|x| x.parse::<u8>()).collect();
 
