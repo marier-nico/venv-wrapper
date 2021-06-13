@@ -1,32 +1,23 @@
-use eyre::{eyre, Result};
+use std::path::Path;
 
-use crate::config::config_data::Config;
+use eyre::Result;
+
+use crate::virtualenv::virtualenv::Virtualenv;
 
 use super::{
-    file_adder::get_file_adder, install_pip::install_pip,
-    interpreter_locator::get_interpreter_locator, python_adder::add_python,
-    python_version::PythonVersion, venv_directory_creator::get_directory_creator,
-    write_venv_config::write_venv_config,
+    file_adder::get_file_adder, install_pip::install_pip, python_adder::add_python,
+    venv_directory_creator::get_directory_creator, write_venv_config::write_venv_config,
 };
 
-pub fn create_virtualenv(config: &Config, interpreter: &str, venv_name: &str) -> Result<()> {
-    let interpreter_locator = get_interpreter_locator(interpreter);
-    let interpreter = interpreter_locator.locate_interpreter(interpreter);
-    let interpreter = match interpreter {
-        Some(interpreter) => interpreter,
-        None => return Err(eyre!("Could not find the specified python interpreter")),
-    };
-
-    let python_version = PythonVersion::try_from_interpreter(&interpreter)?;
+pub fn create_virtualenv(venv: &Virtualenv, source_interpreter: &Path) -> Result<()> {
     let directory_creator = get_directory_creator()?;
     let file_adder = get_file_adder();
 
-    let venv_root = config.venv_root.as_ref().unwrap();
-    let venv_path = venv_root.join(venv_name);
+    let venv_path = venv.parent_dir.join(&venv.name);
 
-    directory_creator.create_directories(&*file_adder, &python_version, &venv_path)?;
-    add_python(&*file_adder, &interpreter, &python_version, &venv_path)?;
-    write_venv_config(&interpreter, &python_version, &venv_path)?;
+    directory_creator.create_directories(&*file_adder, &venv.python_version, &venv_path)?;
+    add_python(&*file_adder, source_interpreter, &venv.python_version, &venv_path)?;
+    write_venv_config(source_interpreter, &venv.python_version, &venv_path)?;
     install_pip(&venv_path)?;
 
     Ok(())
