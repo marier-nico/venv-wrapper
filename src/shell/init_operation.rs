@@ -26,7 +26,7 @@ impl ShellOperation for InitOperation {
                     set result (cargo run -- $argv)
 
                     if test -n "$result"
-                        echo "$result" | source
+                        string join \n $result | source
                     end
                end"#,
             VENV_WRAPPER_SHELL_ENV_VAR_NAME
