@@ -1,2 +1,2 @@
 pub mod creation;
-pub mod virtualenv;
+pub mod virtualenv_info;

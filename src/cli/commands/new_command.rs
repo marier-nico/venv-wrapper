@@ -6,7 +6,7 @@ use crate::{
             create_virtualenv, interpreter_locator::get_interpreter_locator,
             python_version::PythonVersion,
         },
-        virtualenv::Virtualenv,
+        virtualenv_info::Virtualenv,
     },
 };
 use clap::ArgMatches;

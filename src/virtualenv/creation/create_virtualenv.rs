@@ -2,7 +2,7 @@ use std::path::Path;
 
 use eyre::Result;
 
-use crate::virtualenv::virtualenv::Virtualenv;
+use crate::virtualenv::virtualenv_info::Virtualenv;
 
 use super::{
     file_adder::get_file_adder, install_pip::install_pip, python_adder::add_python,
