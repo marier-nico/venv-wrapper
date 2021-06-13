@@ -12,9 +12,13 @@ keywords = ["cli", "python", "venv", "virtualenv"]
 categories = ["command-line-utilities", "development-tools"]
 
 [dependencies]
+ansi_term = "~0.12.1"
 clap = "~2.33"
 directories = "~3.0.2"
+env_logger = "~0.8.4"
 eyre = "~0.6.5"
+indenter = "~0.3.3"
 is_executable = "~1.0.1"
+log = "~0.4.14"
 os_str_bytes = "~3.1"
 which = "~4.1.0"
