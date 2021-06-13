@@ -1,6 +1,4 @@
-use crate::constants::VENV_WRAPPER_SHELL_ENV_VAR_NAME;
-
-use super::shell_operation::ShellOperation;
+use crate::{constants::VENV_WRAPPER_SHELL_ENV_VAR_NAME, shell::shell_operation::ShellOperation};
 
 pub struct InitOperation {}
 impl ShellOperation for InitOperation {

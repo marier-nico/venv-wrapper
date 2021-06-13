@@ -1,7 +1,7 @@
 use crate::{
     cli::command::{Command, CommandResult},
     config::config_data::Config,
-    shell::init_operation::InitOperation,
+    shell::operations::init_operation::InitOperation,
 };
 use clap::ArgMatches;
 use eyre::Result;

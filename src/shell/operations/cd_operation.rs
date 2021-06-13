@@ -1,4 +1,4 @@
-use super::shell_operation::ShellOperation;
+use crate::shell::shell_operation::ShellOperation;
 
 pub struct CdOperation<'a> {
     target_dir: &'a str,

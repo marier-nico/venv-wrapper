@@ -1,7 +1,7 @@
 use crate::{
     cli::command::{Command, CommandResult},
     config::config_data::Config,
-    virtualenv::create_virtualenv,
+    virtualenv::creation::create_virtualenv,
 };
 use clap::ArgMatches;
 use eyre::Result;
