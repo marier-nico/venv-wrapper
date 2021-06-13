@@ -11,6 +11,11 @@ pub fn get_app<'a, 'b>() -> clap::App<'a, 'b> {
 
         (@arg venv_root: !required +takes_value -r --("venv-root") "Set the location to store virtualenvs in [default: ~/.virtualenvs]")
 
+        (@subcommand init =>
+            (about: "Initialize your shell to use venv-wrapper")
+            (@arg shell: +required +takes_value possible_values(&["bash", "fish", "zsh"]) "The name of the shell you're using")
+        )
+
         (@subcommand new =>
             (about: "Create a new virtual environment")
             (@arg name: +required +takes_value "The virtualenv's name")

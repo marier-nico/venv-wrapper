@@ -1,11 +1,14 @@
 use clap::ArgMatches;
 use eyre::{eyre, Result};
 
-use crate::{config::config_data::Config, virtualenv::create_virtualenv};
+use crate::{cli::{command::Command, commands::{init_command::InitCommand, new_command::NewCommand}}, config::config_data::Config};
 
-pub fn cli_main(matches: &ArgMatches, config: &Config) -> Result<()> {
+use super::command::CommandResult;
+
+pub fn cli_main(matches: &ArgMatches, config: &Config) -> Result<CommandResult> {
     match matches.subcommand() {
-        ("new", Some(_sub_matches)) => create_virtualenv(config),
+        ("init", Some(sub_matches)) => InitCommand::run(config, sub_matches),
+        ("new", Some(sub_matches)) => NewCommand::run(config, sub_matches),
         _ => Err(eyre!("Unknown command")),
     }
 }

@@ -9,10 +9,9 @@ use super::{
     write_venv_config::write_venv_config,
 };
 
-pub fn create_virtualenv(config: &Config) -> Result<()> {
-    let interpreter_info = config.interpreter.as_ref().unwrap();
-    let interpreter_locator = get_interpreter_locator(interpreter_info);
-    let interpreter = interpreter_locator.locate_interpreter(interpreter_info);
+pub fn create_virtualenv(config: &Config, interpreter: &str, venv_name: &str) -> Result<()> {
+    let interpreter_locator = get_interpreter_locator(interpreter);
+    let interpreter = interpreter_locator.locate_interpreter(interpreter);
     let interpreter = match interpreter {
         Some(interpreter) => interpreter,
         None => return Err(eyre!("Could not find the specified python interpreter")),
@@ -23,7 +22,7 @@ pub fn create_virtualenv(config: &Config) -> Result<()> {
     let file_adder = get_file_adder();
 
     let venv_root = config.venv_root.as_ref().unwrap();
-    let venv_path = venv_root.join(config.venv_name.as_ref().unwrap());
+    let venv_path = venv_root.join(venv_name);
 
     directory_creator.create_directories(&*file_adder, &python_version, &venv_path)?;
     add_python(&*file_adder, &interpreter, &python_version, &venv_path)?;
