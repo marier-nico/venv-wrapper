@@ -18,7 +18,7 @@ impl Virtualenv {
         if cfg!(target_family = "unix") {
             self.path().join("bin")
         } else {
-            self.path().join("Scr)pts")
+            self.path().join("Scripts")
         }
     }
 
@@ -26,7 +26,7 @@ impl Virtualenv {
         if cfg!(target_family = "unix") {
             self.path().join("include")
         } else {
-            self.path().join("Inc)ude")
+            self.path().join("Include")
         }
     }
 

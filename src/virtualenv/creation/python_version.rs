@@ -28,6 +28,10 @@ impl PythonVersion {
         format!("python{}.{}", self.major, self.minor)
     }
 
+    pub fn patch_prefix(&self) -> String {
+        format!("python{}.{}.{}", self.major, self.minor, self.patch)
+    }
+
     pub fn executable_names(&self) -> Vec<String> {
         return vec![self.minor_prefix(), self.major_prefix(), PythonVersion::prefix()];
     }

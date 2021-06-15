@@ -6,7 +6,7 @@ use crate::{
 use clap::ArgMatches;
 use eyre::Result;
 
-pub struct InitCommand {}
+pub struct InitCommand;
 impl Command for InitCommand {
     fn run(_config: &Config, matches: &ArgMatches) -> Result<CommandResult> {
         let shell_to_init = matches.value_of("shell").unwrap();

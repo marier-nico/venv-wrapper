@@ -7,7 +7,7 @@ use crate::{
 use clap::ArgMatches;
 use eyre::Result;
 
-pub struct ActivateCommand {}
+pub struct ActivateCommand;
 impl Command for ActivateCommand {
     fn run(config: &Config, matches: &ArgMatches) -> Result<CommandResult> {
         let venv_name = matches.value_of("name").unwrap();

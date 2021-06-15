@@ -12,6 +12,7 @@ use eyre::Result;
 mod cli;
 mod config;
 mod constants;
+mod presentation;
 mod shell;
 mod virtualenv;
 

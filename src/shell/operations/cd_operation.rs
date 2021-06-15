@@ -1,11 +1,11 @@
 use crate::shell::shell_operation::ShellOperation;
 
-pub struct CdOperation<'a> {
-    target_dir: &'a str,
+pub struct CdOperation {
+    target_dir: String,
 }
 
-impl<'a> CdOperation<'a> {
-    pub fn to(dir: &'a str) -> Self {
+impl CdOperation {
+    pub fn to(dir: String) -> Self {
         CdOperation {
             target_dir: dir,
         }
@@ -16,7 +16,7 @@ impl<'a> CdOperation<'a> {
     }
 }
 
-impl<'a> ShellOperation for CdOperation<'a> {
+impl ShellOperation for CdOperation {
     fn bash_eval(&self) -> String {
         self.get_eval()
     }

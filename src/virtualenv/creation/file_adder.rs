@@ -5,7 +5,7 @@ pub trait FileAdder {
     fn add_file(&self, original: &Path, destination: &Path) -> Result<()>;
 }
 
-pub struct LinkingFileAdder {}
+pub struct LinkingFileAdder;
 impl FileAdder for LinkingFileAdder {
     #[cfg(target_family = "unix")]
     fn add_file(&self, original: &Path, link: &Path) -> Result<()> {

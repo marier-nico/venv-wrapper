@@ -6,7 +6,7 @@ pub trait InterpreterLocator {
     fn locate_interpreter(&self, interpreter_name: &str) -> Option<PathBuf>;
 }
 
-pub struct ExplicitPathInterpreterLocator {}
+pub struct ExplicitPathInterpreterLocator;
 impl InterpreterLocator for ExplicitPathInterpreterLocator {
     fn locate_interpreter(&self, interpreter_path: &str) -> Option<PathBuf> {
         let interpreter_path = PathBuf::from(interpreter_path);
@@ -19,7 +19,7 @@ impl InterpreterLocator for ExplicitPathInterpreterLocator {
     }
 }
 
-pub struct NameInterpreterLocator {}
+pub struct NameInterpreterLocator;
 impl InterpreterLocator for NameInterpreterLocator {
     fn locate_interpreter(&self, interpreter_name: &str) -> Option<PathBuf> {
         let interpreter_path = which(interpreter_name);
@@ -30,7 +30,7 @@ impl InterpreterLocator for NameInterpreterLocator {
     }
 }
 
-pub struct PyenvNameInterpreterLocator {}
+pub struct PyenvNameInterpreterLocator;
 impl InterpreterLocator for PyenvNameInterpreterLocator {
     fn locate_interpreter(&self, interpreter_name: &str) -> Option<PathBuf> {
         let output = Command::new("pyenv").arg("which").arg(interpreter_name).output();

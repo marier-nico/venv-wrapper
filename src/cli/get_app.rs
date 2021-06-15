@@ -21,6 +21,10 @@ pub fn get_app<'a, 'b>() -> clap::App<'a, 'b> {
             (@arg shell: +required +takes_value possible_values(&["bash", "fish", "zsh"]) "The name of the shell you're using")
         )
 
+        (@subcommand ls =>
+            (about: "Show a list of available virtualenvs")
+        )
+
         (@subcommand new =>
             (about: "Create a new virtual environment")
             (@arg name: +required +takes_value "The virtualenv's name")
