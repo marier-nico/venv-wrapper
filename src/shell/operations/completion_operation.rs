@@ -1,22 +1,34 @@
+use std::path::PathBuf;
+
 use crate::shell::shell_operation::ShellOperation;
 
-pub struct CompletionOperation;
+pub struct CompletionOperation {
+    venv_dir: PathBuf
+}
+
 impl ShellOperation for CompletionOperation {
     fn bash_eval(&self) -> String {
         todo!()
     }
 
-    // TODO: Add completions for
-    // - CLI options (-r at the root)
-    // - python executable option in the new command (maybe try common paths for the python executable and `which python`)
-    //   would be nice if a `which` returning all paths existed
     // TODO: Use the configured value for the venv home by default, also be aware of the root `-r` option
     fn fish_eval(&self) -> String {
         String::from(
-            r#"set -l commands activate help init ls new
+            r#"set -l subcommands activate help init ls new
                complete -c venv -f
-               complete -c venv -n "not __fish_seen_subcommand_from $commands" -a "$commands"
+
+               # Handle completions for the venv-root option
+               complete -c venv -n "not __fish_seen_subcommand_from $subcommands" -s r -l venv-root -a "(ls -d */ .*/)"
+
+               # Suggest subcommands
+               complete -c venv -n "not __fish_seen_subcommand_from $subcommands" -a "$subcommands"
+
+               # Suggest available virtualenvs for activation
                complete -c venv -n "__fish_seen_subcommand_from activate" -a "(ls $HOME/.virtualenvs)"
+
+               # Suggest python interpreters for new virtualenvs
+               set split_path (string split : $PATH)
+               complete -c venv -n "__fish_seen_subcommand_from new" -s p -l python -a "(/bin/find $split_path -name 'python*' | /bin/grep -o '\(python\|python.*[0-9]\)\b' | sort -u)"
         "#,
         )
     }
