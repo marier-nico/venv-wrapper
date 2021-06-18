@@ -18,7 +18,11 @@ mod virtualenv;
 
 fn main() {
     init_logging();
-    let matches = get_app().get_matches();
+    let matches = match get_app().get_matches_safe() {
+        Ok(matches) => matches,
+        Err(e) => return eprintln!("{}", e.message),
+    };
+
     let cli_config = Config::from(&matches);
     let config = Config::merge(vec![Config::default(), cli_config]);
 
