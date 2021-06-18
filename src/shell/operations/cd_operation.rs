@@ -5,7 +5,7 @@ pub struct CdOperation {
 }
 
 impl CdOperation {
-    pub fn to(dir: String) -> Self {
+    pub fn _to(dir: String) -> Self {
         CdOperation {
             target_dir: dir,
         }

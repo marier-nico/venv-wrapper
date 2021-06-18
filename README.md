@@ -54,6 +54,18 @@ really be all that useful).
 
 Though, since emojis are valid UTF-8, feel free to use them in your virtualenv names! 🚀
 
+# Contributing
+
+## Getting Started
+
+Mostly, you should install [pre-commit](https://pre-commit.com/) and run `pre-commit install` to
+make sure your commits are up to stuff! Also, your commits should adhere to
+[conventional commits](https://www.conventionalcommits.org/en/v1.0.0/). To do this, you can use a
+tool like [commitizen](https://github.com/commitizen-tools/commitizen), which will help make sure
+all commits look good.
+
+The commit convention was added recently, so most commits are not yet compliant!
+
 ## Missing Features
 
 In its current state, this project does not quite match the features of `virtualenvwrapper`. The

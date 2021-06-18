@@ -22,7 +22,7 @@ impl Virtualenv {
         }
     }
 
-    pub fn include_path(&self) -> PathBuf {
+    pub fn _include_path(&self) -> PathBuf {
         if cfg!(target_family = "unix") {
             self.path().join("include")
         } else {
@@ -30,7 +30,7 @@ impl Virtualenv {
         }
     }
 
-    pub fn lib_path(&self) -> PathBuf {
+    pub fn _lib_path(&self) -> PathBuf {
         if cfg!(target_family = "unix") {
             self.path().join("lib")
         } else {
@@ -38,7 +38,7 @@ impl Virtualenv {
         }
     }
 
-    pub fn lib64_path(&self) -> Option<PathBuf> {
+    pub fn _lib64_path(&self) -> Option<PathBuf> {
         if cfg!(any(target_os = "windows", target_os = "darwin")) {
             None
         } else {
