@@ -7,7 +7,7 @@ impl ShellOperation for InitOperation {
             r#"export {}=bash
                venv() {{
                     local result
-                    result="$(cargo run -- $@)"
+                    result="$(venv-wrapper $@)"
 
                     if test -n "$result"; then
                         eval "$result"
@@ -21,7 +21,7 @@ impl ShellOperation for InitOperation {
         format!(
             r#"set -gx {} fish
                function venv
-                    set result (cargo run -- $argv)
+                    set result (venv-wrapper $argv)
 
                     if test -n "$result"
                         string join \n $result | source
@@ -36,7 +36,7 @@ impl ShellOperation for InitOperation {
             r#"export {}=zsh
                venv() {{
                     local result
-                    result="$(cargo run -- $@)"
+                    result="$(venv-wrapper $@)"
 
                     if test -n "$result"; then
                         eval "$result"
