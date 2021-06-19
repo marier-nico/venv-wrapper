@@ -22,7 +22,15 @@ impl Virtualenv {
         }
     }
 
-    pub fn _include_path(&self) -> PathBuf {
+    pub fn python_path(&self) -> PathBuf {
+        if cfg!(target_family = "unix") {
+            self.bin_path().join("python")
+        } else {
+            self.bin_path().join("python.exe")
+        }
+    }
+
+    pub fn include_path(&self) -> PathBuf {
         if cfg!(target_family = "unix") {
             self.path().join("include")
         } else {
@@ -30,7 +38,7 @@ impl Virtualenv {
         }
     }
 
-    pub fn _lib_path(&self) -> PathBuf {
+    pub fn lib_path(&self) -> PathBuf {
         if cfg!(target_family = "unix") {
             self.path().join("lib")
         } else {
@@ -38,11 +46,20 @@ impl Virtualenv {
         }
     }
 
-    pub fn _lib64_path(&self) -> Option<PathBuf> {
+    pub fn lib64_path(&self) -> Option<PathBuf> {
         if cfg!(any(target_os = "windows", target_os = "darwin")) {
             None
         } else {
             Some(self.path().join("lib64"))
+        }
+    }
+
+    pub fn site_packages_path(&self) -> PathBuf {
+        let lib_path = self.lib_path();
+        if cfg!(target_family = "unix") {
+            lib_path.join(self.python_version.minor_prefix()).join("site-packages")
+        } else {
+            lib_path.join("site-packages")
         }
     }
 }

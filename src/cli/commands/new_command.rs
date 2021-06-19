@@ -3,7 +3,7 @@ use crate::{
     config::config_data::Config,
     virtualenv::{
         creation::{
-            create_virtualenv, interpreter_locator::get_interpreter_locator,
+            create_virtualenv, locate_interpreter::locate_interpreter,
             python_version::PythonVersion,
         },
         virtualenv_info::Virtualenv,
@@ -18,8 +18,7 @@ impl Command for NewCommand {
         let venv_name = matches.value_of("name").unwrap();
 
         let interpreter_info = matches.value_of("python_executable").unwrap();
-        let interpreter_locator = get_interpreter_locator(interpreter_info);
-        let interpreter = match interpreter_locator.locate_interpreter(interpreter_info) {
+        let interpreter = match locate_interpreter(interpreter_info) {
             Some(interpreter) => interpreter,
             None => return Err(eyre!("Could not find the specified python interpreter")),
         };
