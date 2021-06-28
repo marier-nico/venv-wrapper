@@ -62,8 +62,12 @@ impl TryFrom<&str> for PythonVersion {
 
     /// Convert a python version string into a PythonVersion.
     ///
-    /// Example of a python version string :
+    /// Examples of a python version string :
     /// - `3.9.5`
+    /// - `3.8.5.final.0`
+    ///
+    /// As long as the first three values between dots correspond to a valid python version,
+    /// it will be parsed successfully.
     ///
     /// # Errors
     ///
@@ -74,12 +78,12 @@ impl TryFrom<&str> for PythonVersion {
         let parsed: Vec<Result<u8, ParseIntError>> =
             value.split('.').map(|x| x.parse::<u8>()).collect();
 
-        if parsed.len() != 3 {
+        if parsed.len() < 3 {
             return Err(eyre!("Python version string '{}' must be in the x.y.z format", value));
         }
 
         let mut parts = vec![];
-        for result in parsed {
+        for result in parsed.into_iter().take(3) {
             match result {
                 Err(_) => {
                     return Err(eyre!("Python version parts must be numbers, got '{}'", value))

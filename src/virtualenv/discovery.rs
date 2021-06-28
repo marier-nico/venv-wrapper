@@ -22,7 +22,7 @@ pub fn find_in_path(name: &str, parent_dir: &Path) -> Result<Virtualenv> {
                 None => continue,
             };
 
-            if key.trim() == "version" {
+            if key.trim() == "version" || key.trim() == "version_info" {
                 let version = PythonVersion::try_from(value)
                     .wrap_err("Could not determine the python version of the venv")?;
 
