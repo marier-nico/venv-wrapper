@@ -16,6 +16,10 @@ pub fn get_app<'a, 'b>() -> clap::App<'a, 'b> {
             (@arg name: +required +takes_value "The name of the virtualenv to activate")
         )
 
+        (@subcommand completions =>
+            (about: "Output completions for your shell")
+        )
+
         (@subcommand init =>
             (about: "Initialize your shell to use venv-wrapper")
             (@arg shell: +required +takes_value possible_values(&["bash", "fish", "zsh"]) "The name of the shell you're using")
