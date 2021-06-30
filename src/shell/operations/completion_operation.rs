@@ -32,7 +32,7 @@ impl ShellOperation for CompletionOperation {
                complete -f -c venv -n "not __fish_seen_subcommand_from $venv_wrapper_commands" -s r -l venv-root -a "(ls -ad */ .*/)"
 
                complete -f -c venv -n "__fish_seen_subcommand_from activate" -a "(ls {})"
-               complete -f -c venv -n "__fish_seen_subcommand_from new" -s p -l python -a "(/bin/find $venv_wrapper_split_path -name 'python*' | /bin/grep -o '\(python\|python.*[0-9]\)\b' | sort -u)"
+               complete -f -c venv -n "__fish_seen_subcommand_from new" -s p -l python -a "(command find $venv_wrapper_split_path -executable -name 'python*' 2>/dev/null | command grep -o 'python\([0-9]\|[0-9]\.[0-9]\|[0-9]\.[0-9]\.[0-9]\)\?\$' | sort -u)"
 
                set -e venv_wrapper_commands
                set -e venv_wrapper_split_path
