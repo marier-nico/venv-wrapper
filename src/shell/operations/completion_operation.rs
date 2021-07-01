@@ -16,12 +16,39 @@ impl CompletionOperation {
 
 impl ShellOperation for CompletionOperation {
     fn bash_eval(&self) -> String {
-        todo!()
+        format!(
+            r#"complete -r venv
+                    _venv_wrapper_completions() {{
+                        if [ "${{#COMP_WORDS[@]}}" = "2" ]; then
+                            COMPREPLY=($(compgen -W "activate help init ls new" -- "${{COMP_WORDS[1]}}"))
+                        fi
+
+                        if [ "${{COMP_WORDS[1]}}" = "activate" ]; then
+                            COMPREPLY=($(compgen -W "$(ls {})" -- "${{COMP_WORDS[${{COMP_CWORD}}]}}"))
+                        elif [ "${{COMP_WORDS[1]}}" = "new" ]; then
+                            if [ "${{#COMP_WORDS[@]}}" = "3" ]; then
+                                COMPREPLY=($(compgen -W '-p --python' -- "${{COMP_WORDS[${{COMP_CWORD}}]}}"))
+                            elif [ "${{COMP_WORDS[2]}}" = "-p" ] || [[ "${{COMP_WORDS[2]}}" == --python* ]]; then
+                                if [ "${{#COMP_WORDS[@]}}" = "4" ]; then
+                                    local venv_wrapper_split_path venv_wrapper_pythons
+                                    IFS=':' read -ra venv_wrapper_split_path <<< "$PATH"
+                                    venv_wrapper_pythons="$(\find ${{venv_wrapper_split_path[@]}} -executable -name 'python*' 2>/dev/null | \grep -o 'python\([0-9]\|[0-9]\.[0-9]\|[0-9]\.[0-9]\.[0-9]\)\?$' | sort -u)"
+
+                                    COMPREPLY=($(compgen -W "$venv_wrapper_pythons" -- "${{COMP_WORDS[${{COMP_CWORD}}]}}"))
+                                fi
+                            fi
+                        fi
+                    }}
+
+                    complete -F _venv_wrapper_completions venv
+        "#,
+            self.venv_dir.to_string_lossy()
+        )
     }
 
     fn fish_eval(&self) -> String {
         format!(
-            r#"complete -e venv
+            r#"complete -ec venv
                set -l venv_wrapper_commands activate help init ls new
                set venv_wrapper_split_path (string split : $PATH)
 
