@@ -33,6 +33,6 @@ impl Command for NewCommand {
 
         create_virtualenv(&venv, &interpreter)?;
 
-        Ok(CommandResult::new().output(Box::new(String::from("🚀️ Virtualenv created"))))
+        Ok(CommandResult::new().output(Box::new(venv)))
     }
 }

@@ -24,5 +24,6 @@ pub fn create_virtualenv(venv: &Virtualenv, source_interpreter: &Path) -> Result
     info!("Installing pip");
     install_pip(&venv)?;
 
+    info!("Virtualenv created 🚀");
     Ok(())
 }
