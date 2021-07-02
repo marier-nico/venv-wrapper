@@ -22,7 +22,7 @@ impl ShellOperation for CompletionOperation {
 
             _venv_wrapper_completions() {{
                 if [ "${{#COMP_WORDS[@]}}" = "2" ]; then
-                    COMPREPLY=($(compgen -W "activate help init ls new" -- "${{COMP_WORDS[1]}}"))
+                    COMPREPLY=($(compgen -W "activate help ls new" -- "${{COMP_WORDS[1]}}"))
                 fi
 
                 if [ "${{COMP_WORDS[1]}}" = "activate" ]; then
@@ -56,9 +56,10 @@ impl ShellOperation for CompletionOperation {
 
             complete -f -c venv
             complete -f -c venv -n "not __fish_seen_subcommand_from $venv_wrapper_commands" -a activate -d "activate a virtualenv"
+            complete -f -c venv -n "not __fish_seen_subcommand_from $venv_wrapper_commands" -a help -d "show the help text"
             complete -f -c venv -n "not __fish_seen_subcommand_from $venv_wrapper_commands" -a ls -d "list available virtualenvs"
             complete -f -c venv -n "not __fish_seen_subcommand_from $venv_wrapper_commands" -a new -d "create a new virtualenv"
-            complete -f -c venv -n "not __fish_seen_subcommand_from $venv_wrapper_commands" -s r -l venv-root -a "(ls -ad */ .*/)"
+            complete -f -c venv -n "not __fish_seen_subcommand_from $venv_wrapper_commands" -s r -l venv-root -a "(ls -ad */ .*/)" -d "set the virtualenv root"
 
             complete -f -c venv -n "__fish_seen_subcommand_from activate" -a "(ls {})"
             complete -f -c venv -n "__fish_seen_subcommand_from new" -s p -l python -a "(command find $venv_wrapper_split_path -executable -name 'python*' 2>/dev/null | command grep -o 'python\([0-9]\|[0-9]\.[0-9]\|[0-9]\.[0-9]\.[0-9]\)\?\$' | sort -u)"
