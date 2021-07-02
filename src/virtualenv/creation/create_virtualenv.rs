@@ -1,6 +1,6 @@
 use std::path::Path;
 
-use eyre::Result;
+use eyre::{eyre, Result};
 use log::info;
 
 use crate::virtualenv::{
@@ -12,6 +12,14 @@ use super::{
 };
 
 pub fn create_virtualenv(venv: &Virtualenv, source_interpreter: &Path) -> Result<()> {
+    if venv.parent_dir.join(&venv.name).exists() {
+        return Err(eyre!(
+            "A directory named '{}' already exists in '{}'",
+            venv.name,
+            venv.parent_dir.to_string_lossy()
+        ));
+    }
+
     info!("Creating venv directories");
     create_venv_directories(&venv)?;
 
