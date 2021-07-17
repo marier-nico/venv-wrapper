@@ -14,6 +14,7 @@ mod config;
 mod constants;
 mod presentation;
 mod shell;
+mod utils;
 mod virtualenv;
 
 fn main() {

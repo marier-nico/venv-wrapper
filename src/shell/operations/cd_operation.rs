@@ -1,3 +1,5 @@
+use std::path::Path;
+
 use crate::shell::shell_operation::ShellOperation;
 
 pub struct CdOperation {
@@ -5,9 +7,9 @@ pub struct CdOperation {
 }
 
 impl CdOperation {
-    pub fn _to(dir: String) -> Self {
+    pub fn to(dir: &Path) -> Self {
         CdOperation {
-            target_dir: dir,
+            target_dir: dir.to_string_lossy().to_string(),
         }
     }
 

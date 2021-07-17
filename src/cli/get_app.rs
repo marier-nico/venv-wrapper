@@ -50,5 +50,12 @@ pub fn get_app<'a, 'b>() -> clap::App<'a, 'b> {
             (about: "Unlink a virtualenv from a project directory")
             (@arg name: +required +takes_value "The virtualenv's name")
         )
+
+        (@subcommand use_command =>
+            (name: "use")
+            (about: "Use a virtualenv (activate it, and cd to the linked project if there is one)")
+            (@arg name: +required +takes_value "The virtualenv's name")
+        )
+
     )
 }

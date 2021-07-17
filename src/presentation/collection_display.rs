@@ -1,6 +1,8 @@
 use ansi_term::Colour::Green;
 use std::fmt::Display;
 
+use crate::utils::intersperse;
+
 pub struct CollectionDisplay<T>
 where
     T: Display,
@@ -19,20 +21,13 @@ where
     }
 }
 
-// Similar behavior to intersperse, but without using nightly
-// https://doc.rust-lang.org/std/iter/trait.Iterator.html#method.intersperse
 impl<T> Display for CollectionDisplay<T>
 where
     T: Display,
 {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        for (i, elem) in self.collection.iter().enumerate() {
-            write!(f, "{} {}", Green.paint("•"), elem)?;
-
-            if i != self.collection.len() - 1 {
-                writeln!(f)?;
-            }
-        }
+        let with_bullet = self.collection.iter().map(|e| format!("{} {}", Green.paint("•"), e));
+        write!(f, "{}", intersperse(with_bullet, '\n'))?;
 
         Ok(())
     }

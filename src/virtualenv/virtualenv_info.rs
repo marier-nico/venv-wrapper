@@ -76,6 +76,10 @@ impl Virtualenv {
         self.parent_dir.join(name)
     }
 
+    pub fn project_path(&self) -> Option<PathBuf> {
+        self.linked_project.clone()
+    }
+
     pub fn bin_path(&self) -> PathBuf {
         if cfg!(target_family = "unix") {
             self.path().join("bin")
