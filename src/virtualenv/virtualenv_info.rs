@@ -55,6 +55,10 @@ impl Virtualenv {
         Ok(config)
     }
 
+    pub fn update_config(&mut self, key: &str, value: &str) {
+        self.config.with_general_section().set(key, value);
+    }
+
     pub fn write_config(&self) -> Result<()> {
         self.config
             .write_to_file(self.config_path())
@@ -140,8 +144,7 @@ impl Virtualenv {
 
         for entry in dirs.unwrap().flatten() {
             let venv_path = entry.path();
-            let venv_name = venv_path.file_name().unwrap().to_string_lossy();
-            match Self::try_from(venv_path.join(venv_name.as_ref()).as_ref()) {
+            match Self::try_from(venv_path.as_ref()) {
                 Ok(venv) => found_venvs.push(venv),
                 Err(_) => continue,
             }

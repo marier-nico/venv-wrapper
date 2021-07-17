@@ -14,8 +14,13 @@ impl Command for LinkCommand {
     fn run(config: &Config, matches: &ArgMatches) -> Result<CommandResult> {
         let venv_name = matches.value_of("name").unwrap();
         let parent_dir = config.venv_root.as_ref().unwrap();
-        let _venv = Virtualenv::try_from(parent_dir.join(venv_name).as_ref())?;
+        let mut venv = Virtualenv::try_from(parent_dir.join(venv_name).as_ref())?;
 
-        todo!()
+        let project = matches.value_of("project").unwrap();
+
+        venv.update_config("project", project);
+        venv.write_config()?;
+
+        Ok(CommandResult::new().output(Box::new("Successfully linked the project!")))
     }
 }
