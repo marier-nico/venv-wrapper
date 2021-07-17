@@ -25,12 +25,13 @@ impl Command for NewCommand {
 
         let python_version = PythonVersion::try_from_interpreter(&interpreter)?;
 
-        let venv = Virtualenv {
-            name: venv_name.to_string(),
-            parent_dir: config.venv_root.as_ref().unwrap().clone(),
+        let venv = Virtualenv::new(
+            venv_name.to_string(),
+            config.venv_root.as_ref().unwrap().clone(),
             python_version,
-            linked_project: None,
-        };
+            None,
+            &interpreter,
+        )?;
 
         create_virtualenv(&venv, &interpreter)?;
 

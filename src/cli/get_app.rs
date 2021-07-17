@@ -25,6 +25,12 @@ pub fn get_app<'a, 'b>() -> clap::App<'a, 'b> {
             (@arg shell: +required +takes_value possible_values(&["bash", "fish", "zsh"]) "The name of the shell you're using")
         )
 
+        (@subcommand link =>
+            (about: "Link a virtualenv with a project directory")
+            (@arg name: +required +takes_value "The virtualenv's name")
+            (@arg project: -p --project +takes_value default_value(".") "The path to the project you want to link")
+        )
+
         (@subcommand ls =>
             (about: "Show a list of available virtualenvs")
         )
