@@ -34,5 +34,10 @@ pub fn get_app<'a, 'b>() -> clap::App<'a, 'b> {
             (@arg name: +required +takes_value "The virtualenv's name")
             (@arg python_executable: !required +takes_value default_value("python3") -p --python "Set the python interpreter to use for the virtualenv (either provide a full path or ensure the interpreter is in your PATH)")
         )
+
+        (@subcommand rm =>
+            (about: "Delete a virtual environment and its contents")
+            (@arg name: +required +takes_value "The virtualenv's name")
+        )
     )
 }
