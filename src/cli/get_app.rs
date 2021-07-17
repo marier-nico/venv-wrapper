@@ -28,7 +28,7 @@ pub fn get_app<'a, 'b>() -> clap::App<'a, 'b> {
         (@subcommand link =>
             (about: "Link a virtualenv with a project directory")
             (@arg name: +required +takes_value "The virtualenv's name")
-            (@arg project: -p --project +takes_value default_value(".") "The path to the project you want to link")
+            (@arg project: -p --project +takes_value "The path to the project you want to link [default: current dir]")
         )
 
         (@subcommand ls =>
@@ -43,6 +43,11 @@ pub fn get_app<'a, 'b>() -> clap::App<'a, 'b> {
 
         (@subcommand rm =>
             (about: "Delete a virtual environment and its contents")
+            (@arg name: +required +takes_value "The virtualenv's name")
+        )
+
+        (@subcommand unlink =>
+            (about: "Unlink a virtualenv from a project directory")
             (@arg name: +required +takes_value "The virtualenv's name")
         )
     )

@@ -7,7 +7,7 @@ use crate::{
         commands::{
             activate_command::ActivateCommand, completions_command::CompletionsCommand,
             init_command::InitCommand, link_command::LinkCommand, ls_command::LsCommand,
-            new_command::NewCommand, rm_command::RmCommand,
+            new_command::NewCommand, rm_command::RmCommand, unlink_command::UnlinkCommand,
         },
     },
     config::config_data::Config,
@@ -24,6 +24,7 @@ pub fn cli_main(matches: &ArgMatches, config: &Config) -> Result<CommandResult> 
         ("ls", Some(sub_matches)) => LsCommand::run(config, sub_matches),
         ("new", Some(sub_matches)) => NewCommand::run(config, sub_matches),
         ("rm", Some(sub_matches)) => RmCommand::run(config, sub_matches),
+        ("unlink", Some(sub_matches)) => UnlinkCommand::run(config, sub_matches),
         _ => Err(eyre!("Unknown command")),
     }
 }

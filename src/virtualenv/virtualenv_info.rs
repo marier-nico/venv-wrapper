@@ -59,6 +59,10 @@ impl Virtualenv {
         self.config.with_general_section().set(key, value);
     }
 
+    pub fn delete_config_key(&mut self, key: &str) {
+        self.config.with_general_section().delete(&key);
+    }
+
     pub fn write_config(&self) -> Result<()> {
         self.config
             .write_to_file(self.config_path())
