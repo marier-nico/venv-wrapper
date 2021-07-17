@@ -29,6 +29,7 @@ impl Command for NewCommand {
             name: venv_name.to_string(),
             parent_dir: config.venv_root.as_ref().unwrap().clone(),
             python_version,
+            linked_project: None,
         };
 
         create_virtualenv(&venv, &interpreter)?;

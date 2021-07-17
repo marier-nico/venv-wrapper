@@ -6,6 +6,7 @@ pub struct Virtualenv {
     pub name: String,
     pub parent_dir: PathBuf,
     pub python_version: PythonVersion,
+    pub linked_project: Option<PathBuf>,
 }
 
 impl Virtualenv {

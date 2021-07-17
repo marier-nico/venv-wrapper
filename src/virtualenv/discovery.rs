@@ -1,6 +1,10 @@
 use eyre::{eyre, Context, Result};
 use ini::Ini;
-use std::{convert::TryFrom, fs, path::Path};
+use std::{
+    convert::TryFrom,
+    fs,
+    path::{Path, PathBuf},
+};
 
 use crate::virtualenv::creation::python_version::PythonVersion;
 
@@ -23,10 +27,13 @@ pub fn find_in_path(name: &str, parent_dir: &Path) -> Result<Virtualenv> {
     let version =
         PythonVersion::try_from(version).wrap_err("Could not parse the python version")?;
 
+    let project_path = config.get_from::<&str>(None, "project").map(PathBuf::from);
+
     Ok(Virtualenv {
         name: name.to_string(),
         parent_dir: parent_dir.to_owned(),
         python_version: version,
+        linked_project: project_path,
     })
 }
 
