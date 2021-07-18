@@ -1,3 +1,4 @@
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
 name: Release New Version
 
 on:
@@ -37,7 +38,7 @@ jobs:
           draft: false
           prerelease: false
       - name: Upload Release Binary
-        id: upload_release_asset 
+        id: upload_release_asset
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -46,7 +47,7 @@ jobs:
           asset_path: ./release/release/venv-wrapper
           asset_name: venv-wrapper
           asset_content_type: application/octet-stream
-  
+
   publish_crates_io:
     needs: [create_release]
     name: Publish to crates.io
@@ -65,7 +66,7 @@ jobs:
         with:
           command: publish
           args: --token ${{ secrets.CRATES_IO_API_TOKEN }}
-  
+
   publish_aur:
     needs: [create_release]
     name: Publishto AUR

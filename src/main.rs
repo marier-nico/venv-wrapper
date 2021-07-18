@@ -1,52 +1,56 @@
-#[macro_use]
-extern crate clap;
-#[macro_use]
-extern crate eyre;
-#[macro_use]
-extern crate serde;
+use clap::ArgMatches;
+use cli::{error_handler::install, get_app::get_app};
+use config::config_data::Config;
+use shell::get_eval::get_eval_from_env;
 
-use std::{convert::TryInto, path::PathBuf};
+use crate::{
+    cli::{cli_main::cli_main, logging::init_logging},
+    shell::get_eval::get_eval_fron_shell_name,
+};
+use eyre::Result;
 
-use ansi_term::Colour::Red;
-use eyre::{Context, Result};
-
-mod clap_app;
-mod commands;
-mod settings;
+mod cli;
+mod config;
+mod constants;
+mod presentation;
+mod shell;
+mod utils;
+mod virtualenv;
 
 fn main() {
-    let result = cli_main();
+    init_logging();
+    let matches = match get_app().get_matches_safe() {
+        Ok(matches) => matches,
+        Err(e) => return eprintln!("{}", e.message),
+    };
+
+    let cli_config = Config::from(&matches);
+    let config =
+        Config::merge(&[Config::default(), Config::from_file(), Config::from_env(), cli_config]);
+
+    let result = run_and_process_result(&matches, &config);
+
     if let Err(e) = result {
-        println!("{}", Red.paint(format!("\nError: {:?}\n", e)));
+        return eprintln!("{:?}", e);
     }
 }
 
-fn cli_main() -> Result<()> {
-    simple_eyre::install()?;
-    let eval_file = create_eval_dir()?;
+fn run_and_process_result(matches: &ArgMatches, config: &Config) -> Result<()> {
+    install()?;
+    let command_result = cli_main(&matches, &config)?;
 
-    let matches = clap_app::get_app().get_matches();
-    let config = settings::ConfigSettings::new(&matches)?;
-    let settings = settings::GlobalSettings::new(config, &matches, &eval_file);
-    match matches.subcommand() {
-        ("init", Some(_sub_matches)) => commands::init(&settings.into())?,
-        ("ls", Some(_sub_matches)) => commands::ls(&settings.into())?,
-        ("new", Some(_sub_matches)) => commands::new(&settings.try_into()?)?,
-        ("activate", Some(_sub_matches)) => commands::activate_cli(&settings.try_into()?)?,
-        ("deactivate", Some(_sub_matches)) => commands::deactivate(&settings.into())?,
-        ("rm", Some(_sub_matches)) => commands::rm(&settings.try_into()?)?,
-        ("project", Some(_sub_matches)) => commands::project_main(&settings)?,
-        ("use", Some(_sub_matches)) => commands::use_command(&settings.try_into()?)?,
-        _ => return Err(eyre!("Unhandled subcommand")),
+    if let Some(shell_operation) = command_result.shell_operation {
+        let eval = match command_result.shell_name {
+            Some(name) => get_eval_fron_shell_name(&*shell_operation, &name)?,
+            None => get_eval_from_env(&*shell_operation)?,
+        };
+
+        print!("{}", eval);
+    }
+
+    if let Some(visible_output) = command_result.visible_output {
+        eprintln!("{}", visible_output);
     }
 
     Ok(())
-}
-
-fn create_eval_dir() -> Result<PathBuf> {
-    let eval_file = directories::BaseDirs::new().unwrap().cache_dir().join("venv-wrapper/eval");
-    std::fs::create_dir_all(eval_file.parent().unwrap())
-        .context("Could not create cache directory")?;
-
-    Ok(eval_file)
 }

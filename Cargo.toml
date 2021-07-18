@@ -1,6 +1,6 @@
 [package]
 name = "venv-wrapper"
-version = "0.1.5"
+version = "2.0.0"
 authors = ["Nicolas Marier <software@nmarier.com>"]
 edition = "2018"
 license = "MIT OR Apache-2.0"
@@ -13,12 +13,13 @@ categories = ["command-line-utilities", "development-tools"]
 
 [dependencies]
 ansi_term = "~0.12.1"
-clap = { version = "~2.33.3", features=["color"]}
-config = "~0.10.1"
-directories = "~3.0.1"
-eyre = "~0.6.3"
-quale = "~1.0"
-serde = { version = "~1.0", features = ["derive"] }
-simple-eyre = "~0.3"
-spinners = "~1.2.0"
-toml = "~0.5"
+clap = "~2.33"
+directories = "~3.0.2"
+env_logger = "~0.8.4"
+eyre = "~0.6.5"
+indenter = "~0.3.3"
+regex = "~1"
+rust-ini = "~0.17"
+is_executable = "~1.0.1"
+log = "~0.4.14"
+which = "~4.1.0"
