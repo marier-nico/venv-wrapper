@@ -1,3 +1,7 @@
-# Changelog
+### Feat
 
-- Automatically build packages for the AUR.
+- **completions**: add shell completions
+
+### Refactor
+
+- **venv-wrapper**: refactor and re-architecture the entire project

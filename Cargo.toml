@@ -1,6 +1,6 @@
 [package]
 name = "venv-wrapper"
-version = "1.0.0"
+version = "2.0.0"
 authors = ["Nicolas Marier <software@nmarier.com>"]
 edition = "2018"
 license = "MIT OR Apache-2.0"
@@ -22,5 +22,4 @@ regex = "~1"
 rust-ini = "~0.17"
 is_executable = "~1.0.1"
 log = "~0.4.14"
-os_str_bytes = "~3.1"
 which = "~4.1.0"

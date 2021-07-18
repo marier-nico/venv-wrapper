@@ -217,12 +217,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "os_str_bytes"
-version = "3.1.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6acbef58a60fe69ab50510a55bc8cdd4d6cf2283d27ad338f54cb52747a9cf2d"
-
-[[package]]
 name = "ppv-lite86"
 version = "0.2.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -352,7 +346,7 @@ checksum = "f1bddf1187be692e79c5ffeab891132dfb0f236ed36a43c7ed39f1165ee20191"
 
 [[package]]
 name = "venv-wrapper"
-version = "1.0.0"
+version = "2.0.0"
 dependencies = [
  "ansi_term 0.12.1",
  "clap",
@@ -362,7 +356,6 @@ dependencies = [
  "indenter",
  "is_executable",
  "log",
- "os_str_bytes",
  "regex",
  "rust-ini",
  "which",

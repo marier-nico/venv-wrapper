@@ -4,7 +4,7 @@ pub fn get_app<'a, 'b>() -> clap::App<'a, 'b> {
     clap_app!(venv =>
         (name: "venv-wrapper")
         (bin_name: "venv")
-        (version: "1.0.0")
+        (version: "2.0.0")
         (author: "Nicolas Marier <software@nmarier.com>")
         (about: "Python virtualenv management")
         (setting: AppSettings::ArgRequiredElseHelp)
