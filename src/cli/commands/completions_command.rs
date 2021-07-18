@@ -9,10 +9,7 @@ use crate::{
 
 pub struct CompletionsCommand;
 impl Command for CompletionsCommand {
-    fn run(config: &Config, _matches: &ArgMatches) -> Result<CommandResult> {
-        let parent_dir = config.venv_root.as_ref().unwrap();
-
-        Ok(CommandResult::new()
-            .operation(Box::new(CompletionOperation::new(parent_dir.to_owned()))))
+    fn run(_config: &Config, _matches: &ArgMatches) -> Result<CommandResult> {
+        Ok(CommandResult::new().operation(Box::new(CompletionOperation {})))
     }
 }

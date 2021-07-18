@@ -363,6 +363,7 @@ dependencies = [
  "is_executable",
  "log",
  "os_str_bytes",
+ "regex",
  "rust-ini",
  "which",
 ]

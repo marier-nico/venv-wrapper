@@ -1,5 +1,6 @@
 pub mod activate_command;
 pub mod completions_command;
+pub mod completions_helpers;
 pub mod init_command;
 pub mod link_command;
 pub mod ls_command;

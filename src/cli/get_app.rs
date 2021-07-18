@@ -57,5 +57,17 @@ pub fn get_app<'a, 'b>() -> clap::App<'a, 'b> {
             (@arg name: +required +takes_value "The virtualenv's name")
         )
 
+        (@subcommand available_pythons_helper =>
+            (name: "available-pythons-helper")
+            (about: "Return the list of available python versions in an easily parsable format")
+            (setting: AppSettings::Hidden)
+        )
+
+        (@subcommand completions_helper_ls =>
+            (name: "completions-helper-ls")
+            (about: "Return the list of virtualenvs in an easily parsable format")
+            (setting: AppSettings::Hidden)
+        )
+
     )
 }
