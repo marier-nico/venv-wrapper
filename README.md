@@ -13,12 +13,6 @@ features from `venv` were re-implemented in Rust instead.
     - Usually the bin path is `~/.cargo/bin`.
 3. Run `cargo install venv-wrapper`.
 
------------------------------------------------------------------
-4. Add `eval "$(venv-wrapper init)"` to your shell init script (`~/.bashrc`, `~/.zshrc`, etc.)
-5. Restart your shell.
-6. You can now run `venv ls` to verify the installation is working.
------------------------------------------------------------------
-
 ### Arch Linux
 
 You can install venv-wrapper from the AUR.
@@ -31,26 +25,88 @@ $ paru -S venv-wrapper-bin
 
 Coming soon!
 
+## Getting Started
+
+1. After installing, make sure you can use the `venv-wrapper` command (it should be in your shell's
+`$PATH`).
+2. Then, you need to setup your shell to use venv-wrapper. To do this, edit your shell
+startup configuration file (`~/.bashrc`, `~/.zshrc`, `~/.config/fish/config.fish`) and add the
+following anywhere in there :
+
+### Bash
+
+```bash
+eval "$(venv-wrapper init bash)"
+venv completions # Optional, if you want shell completions
+```
+
+### ZSH
+
+```zsh
+eval "$(venv-wrapper init zsh)"
+venv completions # Optional, if you want shell completions
+```
+
+### Fish
+
+```bash
+venv-wrapper init fish | source
+venv completions # Optional, if you want shell completions
+```
+
 ## Configuration
 
 It's possible to configure venv-wrapper with either a configuration file, environment variables, or
 CLI flags.
 
-- `~/.config/venv-wrapper/config.toml`
-    - All paths in the config file must be absolute.
-    ```toml
-    venvs_dir = "/home/username/.a-different-venvs-directory"
-    ```
-
-- `VENVWRAPPER_VENVS_DIR=~/.a-different-venvs-directory venv ls`
-    - Paths do not need to be absolute with environment variables.
-
-- `venv -d ~/.a-different-venvs-directory venv ls`
-    - Paths do not need to be absolute with CLI flags.
-
 ### Available Configuration Values
 
 - `venv_root`: The directory in which to store all virtualenvs (defaults to `~/.virtualenvs`).
+
+### Config File
+
+#### Config Content
+
+The config file is a simple `ini` file that contains no sections, like this :
+
+```ini
+venv_root = /home/me/.non-default-location
+```
+
+**CAUTION**: Paths in your configuration MUST be absolute, otherwise you might end up putting
+virtual environments where you don't intend to.
+
+#### Config Location
+
+The location for the configuration file depends on your platform of choice. For specific
+implementation details, see the [directories](https://docs.rs/directories/3.0.2/directories/) crate.
+
+- **Linux**
+
+    The [XDG user directory](https://www.freedesktop.org/wiki/Software/xdg-user-dirs/) specification is
+    followed. Assuming defaults, the configuration should be located in
+    `~/.config/venv-wrapper/config.ini`.
+
+- **macOS**
+
+    The [Standard Directories](https://developer.apple.com/library/content/documentation/FileManagement/Conceptual/FileSystemProgrammingGuide/FileSystemOverview/FileSystemOverview.html#//apple_ref/doc/uid/TP40010672-CH2-SW6)
+    are used. By default, the configuration should be in `~/Library/Application support/venv-wrapper/config.ini`
+
+### Environment Variables
+
+Note that paths do not need to be absolute here because your shell will perform path expansion.
+You _do_ need the path to be absolute if your shell does not expand paths.
+
+```bash
+VENVWRAPPER_VENV_ROOT=~/.a-different-venvs-directory venv ls
+```
+
+### CLI Flags
+
+The same note as with environment variables applies here : no need for an absolute path unless your
+shell does not expand paths.
+
+- `venv -r ~/.a-different-venvs-directory venv ls`
 
 ## Shell Compatibility
 

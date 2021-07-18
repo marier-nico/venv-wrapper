@@ -25,7 +25,8 @@ fn main() {
     };
 
     let cli_config = Config::from(&matches);
-    let config = Config::merge(vec![Config::default(), cli_config]);
+    let config =
+        Config::merge(&[Config::default(), Config::from_file(), Config::from_env(), cli_config]);
 
     let result = run_and_process_result(&matches, &config);
 

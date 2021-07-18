@@ -1,6 +1,7 @@
 use clap::ArgMatches;
 use directories::BaseDirs;
-use std::path::PathBuf;
+use ini::Ini;
+use std::{env, path::PathBuf};
 
 #[derive(Debug)]
 pub struct Config {
@@ -16,16 +17,37 @@ impl Config {
 }
 
 impl Config {
-    pub fn merge(configs: Vec<Self>) -> Self {
+    pub fn merge(configs: &[Self]) -> Self {
         let mut merged = Config::new();
 
-        for config in configs.into_iter() {
-            if let Some(venv_root) = config.venv_root {
-                merged.venv_root = Some(venv_root);
+        for config in configs.iter() {
+            if let Some(venv_root) = config.venv_root.as_ref() {
+                merged.venv_root = Some(venv_root.to_owned());
             }
         }
 
         merged
+    }
+
+    pub fn from_file() -> Self {
+        let mut config = Config::new();
+
+        if let Some(dirs) = BaseDirs::new() {
+            let config_file = dirs.config_dir().join("venv-wrapper/config.ini");
+            if let Ok(config_file) = Ini::load_from_file(config_file) {
+                config.venv_root =
+                    config_file.general_section().get("venv_root").map(PathBuf::from);
+            }
+        }
+
+        config
+    }
+
+    pub fn from_env() -> Self {
+        let mut config = Config::new();
+        config.venv_root = env::var("VENVWRAPPER_VENV_ROOT").ok().map(PathBuf::from);
+
+        config
     }
 }
 
