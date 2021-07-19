@@ -21,7 +21,13 @@ You can install venv-wrapper from the AUR.
 $ paru -S venv-wrapper-bin
 ```
 
-### PPA, Homebrew
+### Homebrew
+
+```bash
+$ brew install marier-nico/packages/venv-wrapper
+```
+
+### PPA
 
 Coming soon!
 
@@ -161,3 +167,4 @@ To release a new version, there a few simple steps to follow.
     - `git tag -s vX.Y.Z -m "Release vX.Y.Z"`
 5. Push the new tag.
     - `git push --tags`
+6. After the release is created, update the homebrew formula [here](https://github.com/marier-nico/homebrew-packages/blob/main/Formula/venv-wrapper.rb).
