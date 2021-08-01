@@ -22,4 +22,4 @@ regex = "~1"
 rust-ini = "~0.17"
 is_executable = "~1.0.1"
 log = "~0.4.14"
-which = "~4.1.0"
+which = { version = "~4.2.2", features = ["regex"] }
