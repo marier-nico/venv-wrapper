@@ -5,7 +5,7 @@ impl ShellOperation for CompletionOperation {
     fn bash_eval(&self) -> String {
         String::from(
             r#"
-            complete -r venv
+            complete -r venv 2>&1 > /dev/null
 
             _venv_wrapper_completions() {
                 if [ "${#COMP_WORDS[@]}" = "2" ]; then
@@ -40,7 +40,7 @@ impl ShellOperation for CompletionOperation {
     fn fish_eval(&self) -> String {
         String::from(
             r#"
-            complete -ec venv
+            complete -ec venv 2>&1 > /dev/null
             set -l venv_wrapper_commands activate help init link ls new rm unlink use
             set venv_wrapper_split_path (string split : $PATH)
 
