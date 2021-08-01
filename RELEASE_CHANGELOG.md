@@ -1,7 +1,7 @@
-### Feat
-
-- **completions**: add shell completions
-
 ### Refactor
 
-- **venv-wrapper**: refactor and re-architecture the entire project
+- **available-pythons-helper**: use the latest which-rs version
+
+### Fix
+
+- **completions**: silence completion deletion output
